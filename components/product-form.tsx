@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
+import { Loader2, CheckCircle2, XCircle } from "lucide-react";
 
 type ProductFormProps = {
   initialData?: {
@@ -70,16 +70,17 @@ export function ProductForm({ initialData }: ProductFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl">
+    <form onSubmit={handleSubmit} className="space-y-8 max-w-3xl">
       {error && (
-        <div className="rounded-md bg-red-50 dark:bg-red-900/30 p-3 text-sm text-red-600 dark:text-red-400">
-          {error}
+        <div className="flex items-center gap-3 rounded-xl bg-red-50 dark:bg-red-900/20 p-4 text-sm text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/30">
+          <XCircle className="h-5 w-5" />
+          <p>{error}</p>
         </div>
       )}
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-2">
         <div className="space-y-2 md:col-span-2">
-          <label htmlFor="name" className="text-sm font-medium">
+          <label htmlFor="name" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
             Product Name
           </label>
           <input
@@ -90,12 +91,12 @@ export function ProductForm({ initialData }: ProductFormProps) {
             value={formData.name}
             onChange={handleChange}
             placeholder="e.g. Premium Cotton T-Shirt"
-            className="flex h-10 w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-400 dark:focus:ring-zinc-600"
+            className="flex h-11 w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 px-4 py-2 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 dark:focus:ring-blue-400/50 focus:border-transparent transition-all shadow-sm"
           />
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="category" className="text-sm font-medium">
+          <label htmlFor="category" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
             Category
           </label>
           <select
@@ -104,7 +105,7 @@ export function ProductForm({ initialData }: ProductFormProps) {
             required
             value={formData.category}
             onChange={handleChange}
-            className="flex h-10 w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-400 dark:focus:ring-zinc-600"
+            className="flex h-11 w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 px-4 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500/50 dark:focus:ring-blue-400/50 focus:border-transparent transition-all shadow-sm appearance-none cursor-pointer"
           >
             <option value="T-Shirt">T-Shirt</option>
             <option value="Shirt">Shirt</option>
@@ -116,7 +117,7 @@ export function ProductForm({ initialData }: ProductFormProps) {
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="stockQuantity" className="text-sm font-medium">
+          <label htmlFor="stockQuantity" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
             Stock Quantity
           </label>
           <input
@@ -127,12 +128,12 @@ export function ProductForm({ initialData }: ProductFormProps) {
             required
             value={formData.stockQuantity}
             onChange={handleChange}
-            className="flex h-10 w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-400 dark:focus:ring-zinc-600"
+            className="flex h-11 w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 px-4 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500/50 dark:focus:ring-blue-400/50 focus:border-transparent transition-all shadow-sm"
           />
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="purchaseRate" className="text-sm font-medium">
+          <label htmlFor="purchaseRate" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
             Purchase Rate (৳)
           </label>
           <input
@@ -144,12 +145,12 @@ export function ProductForm({ initialData }: ProductFormProps) {
             required
             value={formData.purchaseRate}
             onChange={handleChange}
-            className="flex h-10 w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-400 dark:focus:ring-zinc-600"
+            className="flex h-11 w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 px-4 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500/50 dark:focus:ring-blue-400/50 focus:border-transparent transition-all shadow-sm"
           />
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="sellingPrice" className="text-sm font-medium">
+          <label htmlFor="sellingPrice" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
             Selling Price (৳)
           </label>
           <input
@@ -161,30 +162,36 @@ export function ProductForm({ initialData }: ProductFormProps) {
             required
             value={formData.sellingPrice}
             onChange={handleChange}
-            className="flex h-10 w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-400 dark:focus:ring-zinc-600"
+            className="flex h-11 w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 px-4 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500/50 dark:focus:ring-blue-400/50 focus:border-transparent transition-all shadow-sm"
           />
         </div>
       </div>
 
-      <div className="flex justify-end gap-4">
+      <div className="flex items-center justify-end gap-4 pt-4 border-t border-zinc-100 dark:border-zinc-800/50">
         <button
           type="button"
           onClick={() => router.back()}
-          className="inline-flex h-10 items-center justify-center rounded-md border border-zinc-200 dark:border-zinc-800 bg-transparent px-4 py-2 text-sm font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-400"
+          className="inline-flex h-11 items-center justify-center rounded-xl border border-zinc-200 dark:border-zinc-800 bg-transparent px-6 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all focus:outline-none focus:ring-2 focus:ring-zinc-400"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={loading}
-          className="inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 dark:bg-zinc-50 px-4 py-2 text-sm font-medium text-white dark:text-zinc-900 transition-colors hover:bg-zinc-900/90 dark:hover:bg-zinc-50/90 focus:outline-none focus:ring-2 focus:ring-zinc-400 disabled:pointer-events-none disabled:opacity-50"
+          className="group relative inline-flex h-11 items-center justify-center overflow-hidden rounded-xl bg-blue-600 px-6 py-2 text-sm font-medium text-white transition-all hover:scale-[1.02] hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] shadow-md shadow-blue-500/20"
         >
           {loading ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           ) : initialData ? (
-            "Update Product"
+            <span className="flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4" />
+              Update Product
+            </span>
           ) : (
-            "Save Product"
+            <span className="flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4" />
+              Save Product
+            </span>
           )}
         </button>
       </div>

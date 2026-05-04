@@ -42,7 +42,7 @@ export default function RootLayout({
               <header className="sticky top-0 z-50 w-full border-b border-zinc-200 dark:border-zinc-800 bg-white/95 dark:bg-zinc-950/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-zinc-950/60">
                 <div className="container mx-auto flex h-14 items-center justify-between px-4">
                   <Link href="/" className="flex items-center gap-2 font-bold text-lg">
-                    Margix
+                    Margix Profit Tracker
                   </Link>
                   <div className="flex items-center gap-4">
                     <ThemeToggle />
