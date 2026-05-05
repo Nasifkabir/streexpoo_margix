@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Loader2, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
-export default function CustomerLoginPage() {
+export default function CustomerRegisterPage() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -19,22 +19,21 @@ export default function CustomerLoginPage() {
     setError("");
 
     try {
-      const res = await signIn("credentials", {
-        redirect: false,
-        email,
-        password,
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
       });
 
-      if (res?.error) {
-        setError("Invalid email or password");
-        setLoading(false);
-        return;
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Failed to register");
       }
 
-      router.push("/");
-      router.refresh();
-    } catch (err) {
-      setError("An unexpected error occurred");
+      // Automatically redirect to login after successful registration
+      router.push("/login?registered=true");
+    } catch (err: any) {
+      setError(err.message || "An unexpected error occurred");
       setLoading(false);
     }
   };
@@ -55,10 +54,10 @@ export default function CustomerLoginPage() {
         <div className="w-full max-w-md">
           <div className="mb-8 text-center">
             <h1 className="text-3xl font-bold tracking-tight text-zinc-900">
-              Welcome Back
+              Create Account
             </h1>
             <p className="text-sm text-zinc-500 mt-2">
-              Sign in to your account to view your orders and wishlist.
+              Join us to track orders, save items, and speed through checkout.
             </p>
           </div>
 
@@ -68,6 +67,21 @@ export default function CustomerLoginPage() {
                 {error}
               </div>
             )}
+
+            <div className="space-y-2">
+              <label htmlFor="name" className="text-sm font-semibold text-zinc-900">
+                Full Name
+              </label>
+              <input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="John Doe"
+                required
+                className="flex h-12 w-full rounded-none border-b-2 border-zinc-200 bg-transparent px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-orange-500 transition-colors"
+              />
+            </div>
 
             <div className="space-y-2">
               <label htmlFor="email" className="text-sm font-semibold text-zinc-900">
@@ -85,14 +99,9 @@ export default function CustomerLoginPage() {
             </div>
 
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label htmlFor="password" className="text-sm font-semibold text-zinc-900">
-                  Password
-                </label>
-                <Link href="#" className="text-xs text-zinc-500 hover:text-zinc-900 underline">
-                  Forgot password?
-                </Link>
-              </div>
+              <label htmlFor="password" className="text-sm font-semibold text-zinc-900">
+                Password
+              </label>
               <input
                 id="password"
                 type="password"
@@ -112,16 +121,16 @@ export default function CustomerLoginPage() {
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : (
                 <span className="flex items-center gap-2">
-                  SIGN IN <ArrowRight className="h-4 w-4" />
+                  CREATE ACCOUNT <ArrowRight className="h-4 w-4" />
                 </span>
               )}
             </button>
           </form>
 
           <div className="mt-8 text-center text-sm text-zinc-500">
-            Don't have an account?{" "}
-            <Link href="/register" className="font-semibold text-zinc-900 hover:text-orange-600 underline">
-              Create one now
+            Already have an account?{" "}
+            <Link href="/login" className="font-semibold text-zinc-900 hover:text-orange-600 underline">
+              Sign in
             </Link>
           </div>
         </div>

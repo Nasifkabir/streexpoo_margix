@@ -26,6 +26,7 @@ export default async function EditProductPage({
     stockQuantity: product.stockQuantity,
     purchaseRate: product.purchaseRate,
     sellingPrice: product.sellingPrice,
+    imageUrl: product.imageUrl || "",
   };
 
   return (

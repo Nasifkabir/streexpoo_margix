@@ -127,10 +127,14 @@ export default function MobileSidebar() {
             <p className="px-3 text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">
               Preferences
             </p>
-            <div className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-400 dark:text-zinc-500 cursor-not-allowed">
+            <Link
+              href="/admin/settings"
+              onClick={() => setIsOpen(false)}
+              className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${pathname === '/admin/settings' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800/50'}`}
+            >
               <Settings className="h-4 w-4" />
-              Settings
-            </div>
+              Store Settings
+            </Link>
           </div>
         </div>
 

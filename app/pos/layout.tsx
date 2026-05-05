@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Store, ChevronLeft } from "lucide-react";
 import SignOutButton from "../admin/SignOutButton";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export default async function POSLayout({
   children,
@@ -14,6 +15,10 @@ export default async function POSLayout({
 
   if (!session) {
     redirect("/login");
+  }
+
+  if (session.user.role === "CUSTOMER") {
+    redirect("/");
   }
 
   // Both STAFF and ADMIN can access POS
@@ -47,6 +52,7 @@ export default async function POSLayout({
         </div>
         
         <div className="flex items-center gap-4">
+          <ThemeToggle />
           <div className="flex items-center gap-3 bg-zinc-100 dark:bg-zinc-800/50 rounded-full pl-2 pr-4 py-1.5 border border-zinc-200 dark:border-zinc-700/50">
             <div className="h-8 w-8 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold text-sm">
               {session.user.name.charAt(0)}

@@ -44,6 +44,7 @@ export default async function ProductsPage() {
           <table className="w-full text-sm text-left">
             <thead className="text-xs text-zinc-500 uppercase bg-zinc-50 dark:bg-[#1e1e22]">
               <tr>
+                <th scope="col" className="px-6 py-4 font-semibold w-16">Image</th>
                 <th scope="col" className="px-6 py-4 font-semibold">Product Name</th>
                 <th scope="col" className="px-6 py-4 font-semibold">Category</th>
                 <th scope="col" className="px-6 py-4 font-semibold">Stock</th>
@@ -55,7 +56,7 @@ export default async function ProductsPage() {
             <tbody>
               {products.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-zinc-500">
+                  <td colSpan={7} className="px-6 py-12 text-center text-zinc-500">
                     No products found. Click "Add Product" to create one.
                   </td>
                 </tr>
@@ -65,6 +66,15 @@ export default async function ProductsPage() {
                     key={product._id.toString()}
                     className="border-b border-zinc-100 dark:border-zinc-800/50 hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition-colors"
                   >
+                    <td className="px-6 py-2">
+                      <div className="h-10 w-10 rounded-md bg-zinc-100 dark:bg-zinc-800 overflow-hidden border border-zinc-200 dark:border-zinc-700 flex items-center justify-center">
+                        {product.imageUrl ? (
+                          <img src={product.imageUrl} alt={product.name} className="h-full w-full object-cover" />
+                        ) : (
+                          <span className="text-[10px] text-zinc-400 font-medium">{product.category.substring(0, 3)}</span>
+                        )}
+                      </div>
+                    </td>
                     <td className="px-6 py-4 font-medium text-zinc-900 dark:text-zinc-200">
                       {product.name}
                     </td>

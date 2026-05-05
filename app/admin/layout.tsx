@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import SignOutButton from "./SignOutButton";
 import MobileSidebar from "@/components/mobile-sidebar";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export default async function AdminLayout({
   children,
@@ -30,8 +31,10 @@ export default async function AdminLayout({
     redirect("/login");
   }
 
-  if (session.user.role !== "ADMIN") {
-    redirect("/"); // Staff will be redirected to the POS interface
+  if (session.user.role === "STAFF") {
+    redirect("/pos");
+  } else if (session.user.role !== "ADMIN") {
+    redirect("/"); // Customers are redirected to storefront
   }
 
   return (
@@ -113,13 +116,16 @@ export default async function AdminLayout({
 
           {/* Preferences */}
           <div className="space-y-1">
-            <p className="px-3 text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">
+            <p className="px-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">
               Preferences
             </p>
-            <div className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-400 dark:text-zinc-500 cursor-not-allowed">
-              <Settings className="h-4 w-4" />
-              Settings
-            </div>
+            <Link
+              href="/admin/settings"
+              className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors"
+            >
+              <Settings className="h-5 w-5" />
+              Store Settings
+            </Link>
           </div>
         </div>
 
@@ -140,13 +146,16 @@ export default async function AdminLayout({
               <p className="text-sm text-zinc-500 dark:text-zinc-400 hidden sm:block">Manage your store analytics and operations.</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 bg-zinc-100 dark:bg-zinc-800/50 rounded-full pl-2 pr-4 py-1.5 border border-zinc-200 dark:border-zinc-700/50 cursor-pointer hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors">
-            <div className="h-8 w-8 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold text-sm">
-              {session.user.name.charAt(0)}
-            </div>
-            <div className="flex flex-col hidden sm:flex">
-              <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 leading-none">{session.user.name}</span>
-              <span className="text-xs text-zinc-500 dark:text-zinc-400">{session.user.email}</span>
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <div className="flex items-center gap-3 bg-zinc-100 dark:bg-zinc-800/50 rounded-full pl-2 pr-4 py-1.5 border border-zinc-200 dark:border-zinc-700/50 cursor-pointer hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors">
+              <div className="h-8 w-8 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold text-sm">
+                {session.user.name.charAt(0)}
+              </div>
+              <div className="flex flex-col hidden sm:flex">
+                <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 leading-none">{session.user.name}</span>
+                <span className="text-xs text-zinc-500 dark:text-zinc-400">{session.user.email}</span>
+              </div>
             </div>
           </div>
         </header>
