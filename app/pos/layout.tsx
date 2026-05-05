@@ -55,10 +55,10 @@ export default async function POSLayout({
           <ThemeToggle />
           <div className="flex items-center gap-3 bg-zinc-100 dark:bg-zinc-800/50 rounded-full pl-2 pr-4 py-1.5 border border-zinc-200 dark:border-zinc-700/50">
             <div className="h-8 w-8 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold text-sm">
-              {session.user.name.charAt(0)}
+              {session.user.name?.charAt(0) || "U"}
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 leading-none">{session.user.name}</span>
+              <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 leading-none">{session.user.name || "User"}</span>
               <span className="text-[10px] text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">{session.user.role}</span>
             </div>
           </div>

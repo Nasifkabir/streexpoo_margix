@@ -1,14 +1,15 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import connectToDatabase from "@/lib/db";
 import Product from "@/models/Product";
 import { authOptions } from "@/lib/auth";
 
 export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session || session.user.role !== "ADMIN") {
@@ -21,7 +22,7 @@ export async function PUT(
     const body = await request.json();
     await connectToDatabase();
 
-    const updatedProduct = await Product.findByIdAndUpdate(params.id, body, {
+    const updatedProduct = await Product.findByIdAndUpdate(id, body, {
       new: true,
       runValidators: true,
     });
@@ -44,10 +45,11 @@ export async function PUT(
 }
 
 export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session || session.user.role !== "ADMIN") {
@@ -59,7 +61,7 @@ export async function DELETE(
 
     await connectToDatabase();
 
-    const deletedProduct = await Product.findByIdAndDelete(params.id);
+    const deletedProduct = await Product.findByIdAndDelete(id);
 
     if (!deletedProduct) {
       return NextResponse.json(

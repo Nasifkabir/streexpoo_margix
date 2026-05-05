@@ -192,7 +192,7 @@ export default function POSClient({ products: initialProducts }: POSClientProps)
                     </span>
                     <button 
                       onClick={() => addToCart(product)}
-                      disabled={cart.find(c => c._id === product._id)?.cartQuantity >= product.stockQuantity}
+                      disabled={(cart.find(c => c._id === product._id)?.cartQuantity || 0) >= product.stockQuantity}
                       className="h-8 w-8 rounded-lg bg-emerald-500 flex items-center justify-center text-white hover:bg-emerald-600 active:scale-95 transition-all disabled:opacity-50 disabled:bg-zinc-300 dark:disabled:bg-zinc-700 disabled:cursor-not-allowed"
                     >
                       <Plus className="h-5 w-5" />

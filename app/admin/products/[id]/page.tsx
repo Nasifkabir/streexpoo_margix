@@ -8,11 +8,12 @@ import { notFound } from "next/navigation";
 export default async function EditProductPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const { id } = await params;
   await connectToDatabase();
   
-  const product = await Product.findById(params.id);
+  const product = await Product.findById(id);
 
   if (!product) {
     notFound();

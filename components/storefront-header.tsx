@@ -39,7 +39,7 @@ export function StorefrontHeader({ settings, session }: { settings: any; session
               <img src={settings.logoUrl} alt={settings.storeName} className="h-8 md:h-10 object-contain transition-transform group-hover:scale-105" />
             ) : (
               <span className="font-black text-2xl md:text-3xl tracking-tighter text-zinc-900 dark:text-white">
-                {settings.storeName.toUpperCase()}
+                {(settings.storeName || "MARGIX").toUpperCase()}
               </span>
             )}
           </Link>
@@ -92,7 +92,7 @@ export function StorefrontHeader({ settings, session }: { settings: any; session
           <div className="flex flex-col h-full">
             <div className="p-6 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
               <span className="font-black text-xl tracking-tighter text-zinc-900 dark:text-white">
-                {settings.storeName.toUpperCase()}
+                {(settings.storeName || "MARGIX").toUpperCase()}
               </span>
               <button 
                 onClick={() => setIsMenuOpen(false)}

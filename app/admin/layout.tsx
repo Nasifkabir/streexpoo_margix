@@ -150,10 +150,10 @@ export default async function AdminLayout({
             <ThemeToggle />
             <div className="flex items-center gap-3 bg-zinc-100 dark:bg-zinc-800/50 rounded-full pl-2 pr-4 py-1.5 border border-zinc-200 dark:border-zinc-700/50 cursor-pointer hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors">
               <div className="h-8 w-8 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold text-sm">
-                {session.user.name.charAt(0)}
+                {session.user.name?.charAt(0) || "A"}
               </div>
               <div className="flex flex-col hidden sm:flex">
-                <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 leading-none">{session.user.name}</span>
+                <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 leading-none">{session.user.name || "Admin"}</span>
                 <span className="text-xs text-zinc-500 dark:text-zinc-400">{session.user.email}</span>
               </div>
             </div>

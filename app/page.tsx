@@ -177,7 +177,7 @@ export default async function Storefront() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24">
             <div className="lg:col-span-2">
               <Link href="/" className="font-black text-4xl tracking-tighter mb-8 block dark:text-white">
-                {settings.storeName.toUpperCase()}
+                {(settings.storeName || "MARGIX").toUpperCase()}
               </Link>
               <p className="text-zinc-500 dark:text-zinc-400 max-w-md font-bold text-lg leading-relaxed">
                 Your premium destination for modern clothing. We prioritize quality, aesthetics, and the best customer experience.

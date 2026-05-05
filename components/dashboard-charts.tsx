@@ -96,7 +96,7 @@ export function TotalRevenueChart({ data }: { data: { name: string; revenue: num
           />
           <Tooltip 
             contentStyle={{ backgroundColor: '#18181b', borderColor: '#27272a', color: '#f4f4f5', borderRadius: '8px' }}
-            formatter={(value: number) => [`৳${value}`, 'Revenue']}
+            formatter={(value: any) => [`৳${value}`, 'Revenue']}
             labelStyle={{ color: '#a1a1aa', marginBottom: '4px' }}
           />
           <Line 
