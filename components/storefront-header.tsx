@@ -4,8 +4,10 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Search, User, ShoppingBag, Menu, X, Share2, Globe, ChevronRight } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
+import { useCart } from "@/context/CartContext";
 
 export function StorefrontHeader({ settings, session }: { settings: any; session: any }) {
+  const { cartCount } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -26,7 +28,7 @@ export function StorefrontHeader({ settings, session }: { settings: any; session
             : "bg-white dark:bg-zinc-950 py-4 md:py-6"
         } px-4 md:px-10 flex items-center justify-between`}
       >
-        <div className="flex items-center gap-4 md:gap-12">
+        <div className="flex-1 flex items-center gap-4">
           <button 
             onClick={() => setIsMenuOpen(true)}
             className="md:hidden text-zinc-600 dark:text-zinc-400 hover:text-blue-600 transition-colors"
@@ -38,19 +40,19 @@ export function StorefrontHeader({ settings, session }: { settings: any; session
             {settings.logoUrl && (
               <img src={settings.logoUrl} alt={settings.storeName} className="h-10 md:h-14 w-auto object-contain transition-transform group-hover:scale-105" />
             )}
-            <span className="font-bebas text-2xl md:text-4xl tracking-[0.05em] text-zinc-900 dark:text-white uppercase leading-none">
+            {/* <span className="font-bebas text-2xl md:text-2xl tracking-[0.05em] text-zinc-900 dark:text-white uppercase leading-none">
               {(settings.storeName || "MARGIX")}
-            </span>
+            </span> */}
           </Link>
-
-          <nav className="hidden md:flex items-center gap-6 text-lg tracking-wider text-zinc-600 dark:text-zinc-400 font-bebas">
-            <Link href="#" className="hover:text-blue-600 transition-colors uppercase">MEN'S T-SHIRT</Link>
-            <Link href="#" className="hover:text-blue-600 transition-colors uppercase">SHIRT</Link>
-            <Link href="#" className="hover:text-blue-600 transition-colors uppercase">PANT</Link>
-          </nav>
         </div>
 
-        <div className="flex items-center gap-3 md:gap-6">
+        <nav className="hidden md:flex flex-1 items-center justify-center gap-8 text-lg tracking-wider text-zinc-600 dark:text-zinc-400 font-bebas">
+          <Link href="#" className="hover:text-blue-600 transition-colors uppercase">MEN'S T-SHIRT</Link>
+          <Link href="#" className="hover:text-blue-600 transition-colors uppercase">SHIRT</Link>
+          <Link href="#" className="hover:text-blue-600 transition-colors uppercase">PANT</Link>
+        </nav>
+
+        <div className="flex-1 flex items-center justify-end gap-3 md:gap-6">
           <div className="hidden sm:block">
             <ThemeToggle />
           </div>
@@ -63,12 +65,14 @@ export function StorefrontHeader({ settings, session }: { settings: any; session
           >
             <User className="h-5 w-5 md:h-6 md:w-6" />
           </Link>
-          <button className="text-zinc-600 dark:text-zinc-400 hover:text-blue-600 transition-colors relative group">
+          <Link href="/checkout" className="text-zinc-600 dark:text-zinc-400 hover:text-blue-600 transition-colors relative group">
             <ShoppingBag className="h-5 w-5 md:h-6 md:w-6" />
-            <span className="absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full bg-blue-600 text-[10px] font-bold text-white flex items-center justify-center border-2 border-white dark:border-zinc-950 group-hover:scale-110 transition-transform">
-              0
-            </span>
-          </button>
+            {cartCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full bg-blue-600 text-[10px] font-bold text-white flex items-center justify-center border-2 border-white dark:border-zinc-950 group-hover:scale-110 transition-transform font-bebas">
+                {cartCount}
+              </span>
+            )}
+          </Link>
         </div>
       </header>
 

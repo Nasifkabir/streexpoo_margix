@@ -77,8 +77,8 @@ export default async function AdminDashboard() {
     <div className="space-y-6 max-w-[1600px] mx-auto pb-10">
       
       {/* Products Overview Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Products Overview</h2>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-outfit">
+        <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-100 font-bebas tracking-wide uppercase">Products Overview</h2>
         
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 text-xs font-medium text-amber-600 dark:text-amber-500 bg-amber-500/10 px-3 py-1.5 rounded-md border border-amber-500/20">
@@ -105,10 +105,10 @@ export default async function AdminDashboard() {
         <OverviewCard 
           title="On Promotion" 
           value="0" 
-          icon={<Tag className="h-5 w-5 text-emerald-500 dark:text-emerald-400" />} 
+          icon={<Tag className="h-5 w-5 text-blue-500 dark:text-blue-400" />} 
           trend="+0%" 
           trendUp={true} 
-          iconBg="bg-emerald-500/10 dark:bg-emerald-500/20"
+          iconBg="bg-blue-500/10 dark:bg-blue-500/20"
         />
         <OverviewCard 
           title="Out of Stock" 
@@ -132,7 +132,7 @@ export default async function AdminDashboard() {
       <div className="grid gap-6 md:grid-cols-3">
         {/* Top Categories */}
         <div className="md:col-span-1 rounded-2xl bg-white dark:bg-[#18181b] border border-zinc-200 dark:border-zinc-800/50 p-6 flex flex-col shadow-sm">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-6">Top Categories</h3>
+          <h3 className="text-lg font-black text-zinc-900 dark:text-zinc-100 mb-6 font-bebas tracking-wide uppercase">Top Categories</h3>
           <div className="flex-1 flex flex-col justify-center">
             {topCategoriesData.length > 0 ? (
               <>
@@ -156,11 +156,11 @@ export default async function AdminDashboard() {
         {/* Total Revenue */}
         <div className="md:col-span-2 rounded-2xl bg-white dark:bg-[#18181b] border border-zinc-200 dark:border-zinc-800/50 p-6 flex flex-col shadow-sm">
           <div className="mb-6">
-            <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Total Revenue</h3>
+            <h3 className="text-lg font-black text-zinc-900 dark:text-zinc-100 font-bebas tracking-wide uppercase">Total Revenue</h3>
             <div className="flex items-end gap-3 mt-1">
-              <span className="text-3xl font-black text-zinc-900 dark:text-zinc-100">৳{totalRevenue.toLocaleString()}</span>
+              <span className="text-3xl font-black text-zinc-900 dark:text-zinc-100 font-outfit">৳{totalRevenue.toLocaleString()}</span>
               {totalRevenue > 0 && (
-                <span className="flex items-center text-sm font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 mb-1">
+                <span className="flex items-center text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-blue-600/10 px-2 py-0.5 rounded border border-blue-600/20 mb-1 uppercase tracking-tighter">
                   <ArrowUpRight className="h-3 w-3 mr-1" />
                   +12% vs last Week
                 </span>
@@ -176,7 +176,7 @@ export default async function AdminDashboard() {
       {/* Products List Table */}
       <div className="rounded-2xl bg-white dark:bg-[#18181b] border border-zinc-200 dark:border-zinc-800/50 overflow-hidden shadow-sm">
         <div className="p-6 border-b border-zinc-200 dark:border-zinc-800/50">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Products List</h3>
+          <h3 className="text-lg font-black text-zinc-900 dark:text-zinc-100 font-bebas tracking-wide uppercase">Products List</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
@@ -195,7 +195,7 @@ export default async function AdminDashboard() {
                   <td className="px-6 py-4 text-zinc-500 dark:text-zinc-400">{p.category}</td>
                   <td className="px-6 py-4 text-zinc-900 dark:text-zinc-200">৳{p.sellingPrice}</td>
                   <td className="px-6 py-4">
-                    <span className={`px-2.5 py-1 rounded-md text-xs font-medium ${p.stockQuantity > 5 ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20' : 'bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20'}`}>
+                    <span className={`px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${p.stockQuantity > 5 ? 'bg-blue-600/10 text-blue-600 dark:text-blue-400 border border-blue-600/20' : 'bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20'}`}>
                       {p.stockQuantity} in stock
                     </span>
                   </td>
@@ -226,14 +226,14 @@ function OverviewCard({ title, value, icon, trend, trendUp, iconBg }: any) {
         </div>
       </div>
       <div>
-        <h3 className="text-sm font-medium text-zinc-500 dark:text-zinc-400 mb-1">{title}</h3>
+        <h3 className="text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1 uppercase tracking-wider">{title}</h3>
         <div className="flex items-end gap-2">
-          <span className="text-3xl font-bold text-zinc-900 dark:text-zinc-100">{value}</span>
-          <span className={`text-xs font-medium px-1.5 py-0.5 rounded border mb-1 ${trendUp ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/20' : 'text-orange-600 dark:text-orange-400 bg-orange-500/10 border-orange-500/20'}`}>
+          <span className="text-2xl font-black text-zinc-900 dark:text-zinc-100 font-outfit">{value}</span>
+          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border mb-1 uppercase tracking-tight ${trendUp ? 'text-blue-600 dark:text-blue-400 bg-blue-600/10 border-blue-600/20' : 'text-orange-600 dark:text-orange-400 bg-orange-500/10 border-orange-500/20'}`}>
             {trend}
           </span>
         </div>
-        <p className="text-xs text-zinc-500 mt-2">Vs last month</p>
+        <p className="text-[10px] text-zinc-500 mt-2 uppercase font-bold opacity-60">Vs last month</p>
       </div>
     </div>
   );

@@ -274,7 +274,7 @@ export default function POSClient({ products: initialProducts }: POSClientProps)
                           min="0"
                           value={item.sellingPrice === 0 ? "" : item.sellingPrice}
                           onChange={(e) => updateCartItemPrice(item._id, Number(e.target.value) || 0)}
-                          className="w-12 sm:w-16 text-right bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded text-sm text-zinc-900 dark:text-zinc-200 focus:outline-none focus:border-emerald-500/50 py-0.5 px-1 hide-arrows"
+                          className="w-12 sm:w-16 text-right bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded text-sm text-zinc-900 dark:text-zinc-200 focus:outline-none focus:border-blue-600/50 py-0.5 px-1 hide-arrows font-bold"
                         />
                       </div>
                     </div>
@@ -328,13 +328,13 @@ export default function POSClient({ products: initialProducts }: POSClientProps)
                 <input
                   type="text"
                   placeholder="Lookup by ID or Name"
-                  className="flex h-10 w-full rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/50 pl-10 pr-4 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:border-emerald-500/50 transition-all"
+                  className="flex h-10 w-full rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/50 pl-10 pr-4 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:border-blue-600/50 transition-all font-bold"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-3 gap-2">
-              <button className="py-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-sm font-medium">Cash</button>
+              <button className="py-2 rounded-lg border border-blue-600/30 bg-blue-600/10 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-widest">Cash</button>
               <button className="py-2 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 text-sm font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800">Card</button>
               <button className="py-2 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 text-sm font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800">QR Pay</button>
             </div>

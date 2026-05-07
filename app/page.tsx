@@ -6,6 +6,7 @@ import { Truck, HeadphonesIcon, RefreshCw, ShieldCheck, ArrowRight, Globe, Share
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { StorefrontHeader } from "@/components/storefront-header";
+import { ProductCard } from "@/components/product-card";
 
 export const dynamic = 'force-dynamic';
 
@@ -19,13 +20,13 @@ export default async function Storefront() {
     footerText: "© 2025 Margix Fashion. All rights reserved.",
     currencySymbol: "৳",
   };
-  
+
   const newArrivals = await Product.find({}).sort({ createdAt: -1 }).limit(8);
   const popularProducts = await Product.find({}).sort({ sellingPrice: -1 }).limit(4);
 
   return (
     <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 font-sans selection:bg-blue-600 selection:text-white overflow-x-hidden">
-      
+
       {/* Top Notification Bar */}
       <div className="bg-zinc-900 dark:bg-black text-white text-[9px] md:text-xs py-2 md:py-3 text-center tracking-[0.2em] font-black uppercase">
         FREE SHIPPING ON ALL ORDERS OVER {settings.currencySymbol}5000
@@ -38,8 +39,8 @@ export default async function Storefront() {
         <div className="bg-[#0a192f] text-white rounded-[2rem] md:rounded-[3.5rem] overflow-hidden relative shadow-2xl shadow-blue-900/20">
           <div className="max-w-[1400px] mx-auto px-4 md:px-20 pt-16 pb-0 md:pt-32 flex flex-col md:flex-row items-center justify-between min-h-[500px] md:min-h-[750px]">
             <div className="md:w-1/2 z-10 pb-12 md:pb-24 text-center md:text-left">
-              <h1 className="text-5xl md:text-[7rem] font-black tracking-tighter leading-[0.85] mb-6 drop-shadow-2xl font-playfair italic">
-                NEW<br/>STORY
+              <h1 className="text-5xl md:text-[4rem] font-black tracking-tighter leading-[0.85] mb-6 drop-shadow-2xl font-playfair italic">
+                SHOP WITH<br />STREEXPO
               </h1>
               <p className="text-sm md:text-lg font-bold mb-8 max-w-sm opacity-90 mx-auto md:mx-0 tracking-wide uppercase">
                 Discover our latest premium collection crafted for your unique style.
@@ -50,9 +51,9 @@ export default async function Storefront() {
             </div>
             <div className="md:w-1/2 relative h-[400px] md:h-[700px] w-full flex items-end justify-center rounded-[2.5rem] md:rounded-[4rem] overflow-hidden shadow-2xl">
               <div className="absolute inset-0 bg-gradient-to-t from-[#0a192f]/40 via-transparent to-transparent z-10" />
-              <img 
-                src="https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?q=80&w=800&auto=format&fit=crop" 
-                alt="Model" 
+              <img
+                src="https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?q=80&w=800&auto=format&fit=crop"
+                alt="Model"
                 className="absolute inset-0 h-full w-full object-cover object-top scale-110"
               />
             </div>
@@ -111,36 +112,7 @@ export default async function Storefront() {
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 md:gap-x-8 gap-y-12">
           {newArrivals.map(product => (
-            <div key={product._id.toString()} className="group cursor-pointer">
-              <div className="aspect-[3/4] bg-zinc-100 dark:bg-zinc-900 rounded-[2rem] md:rounded-[2.5rem] mb-4 overflow-hidden relative shadow-sm transition-all duration-500 group-hover:shadow-xl group-hover:-translate-y-2">
-                {product.imageUrl ? (
-                  <img 
-                    src={product.imageUrl} 
-                    alt={product.name} 
-                    className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700" 
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-zinc-300 dark:text-zinc-700 font-black text-3xl uppercase tracking-tighter">
-                    {product.category}
-                  </div>
-                )}
-                {product.stockQuantity === 0 && (
-                  <div className="absolute top-6 right-6 bg-black text-white text-[10px] font-black px-4 py-2 rounded-full tracking-widest">SOLD OUT</div>
-                )}
-                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end justify-center pb-8 px-8">
-                  <button className="w-full bg-white text-zinc-900 font-black text-[10px] tracking-widest py-4 rounded-2xl hover:bg-blue-600 hover:text-white transition-all transform translate-y-4 group-hover:translate-y-0 duration-300 shadow-xl">
-                    ADD TO CART
-                  </button>
-                </div>
-              </div>
-              <div className="px-1">
-                <h3 className="font-black text-sm md:text-base mb-1 line-clamp-1 group-hover:text-blue-600 transition-colors uppercase tracking-tight">{product.name}</h3>
-                <div className="flex items-center justify-between">
-                  <p className="text-zinc-500 dark:text-zinc-400 text-[10px] md:text-xs font-bold uppercase tracking-widest">{product.category}</p>
-                  <p className="font-black text-base md:text-lg text-blue-600">{settings.currencySymbol}{product.sellingPrice}</p>
-                </div>
-              </div>
-            </div>
+            <ProductCard key={product._id.toString()} product={JSON.parse(JSON.stringify(product))} settings={settings} />
           ))}
         </div>
       </section>
@@ -151,7 +123,7 @@ export default async function Storefront() {
           <div className="p-8 md:p-16 lg:p-24 text-center lg:text-left">
             <span className="text-blue-600 font-black tracking-[0.3em] text-[10px] md:text-xs mb-6 block uppercase">Season 2025</span>
             <h2 className="text-4xl md:text-7xl font-black tracking-tighter leading-[0.9] mb-8 dark:text-white font-playfair">
-              STREET<br/>VIBE
+              STREET<br />VIBE
             </h2>
             <p className="text-zinc-500 dark:text-zinc-400 mb-10 max-w-sm font-bold text-base md:text-lg leading-relaxed mx-auto lg:mx-0">
               Explore the new collection designed with outstanding quality and minimalist aesthetic.
@@ -161,9 +133,9 @@ export default async function Storefront() {
             </Link>
           </div>
           <div className="h-[500px] lg:h-full min-h-[600px] relative group overflow-hidden">
-             <img 
-              src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=800&auto=format&fit=crop" 
-              alt="Promo" 
+            <img
+              src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=800&auto=format&fit=crop"
+              alt="Promo"
               className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-all duration-500" />
@@ -195,7 +167,7 @@ export default async function Storefront() {
                 )}
               </div>
             </div>
-            
+
             <div>
               <h4 className="font-black mb-8 uppercase text-xs tracking-[0.2em] text-zinc-400">Store Info</h4>
               <ul className="space-y-4 font-bold text-zinc-500 dark:text-zinc-400">

@@ -3,7 +3,10 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { AuthProvider } from "@/components/auth-provider";
+import { CartProvider } from "@/context/CartContext";
+import { ToastProvider } from "@/context/ToastContext";
 import Link from "next/link";
+import type { Metadata } from "next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,6 +21,7 @@ const geistMono = Geist_Mono({
 const outfit = Outfit({
   variable: "--font-outfit",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"]
 });
 
 const playfair = Playfair_Display({
@@ -49,13 +53,17 @@ export default function RootLayout({
         <AuthProvider>
           <ThemeProvider
             attribute="class"
-            defaultTheme="dark"
+            defaultTheme="light"
             enableSystem
             disableTransitionOnChange
           >
-            <div className="flex min-h-screen flex-col">
-              <main className="flex-1 flex flex-col">{children}</main>
-            </div>
+            <CartProvider>
+              <ToastProvider>
+                <div className="flex min-h-screen flex-col">
+                  <main className="flex-1 flex flex-col">{children}</main>
+                </div>
+              </ToastProvider>
+            </CartProvider>
           </ThemeProvider>
         </AuthProvider>
       </body>

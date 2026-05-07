@@ -13,16 +13,16 @@ export default async function ProductsPage() {
 
   return (
     <div className="space-y-6 max-w-[1600px] mx-auto pb-10">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between font-outfit">
         <div>
-          <h1 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Inventory Management</h1>
-          <p className="text-zinc-500 dark:text-zinc-400 mt-1 text-sm">
+          <h1 className="text-2xl font-black text-zinc-900 dark:text-zinc-100 font-bebas tracking-wide uppercase">Inventory Management</h1>
+          <p className="text-[10px] text-zinc-500 dark:text-zinc-400 mt-1 uppercase font-bold tracking-widest opacity-60">
             Manage your clothing shop inventory, pricing, and stock.
           </p>
         </div>
         <Link
           href="/admin/products/new"
-          className="inline-flex items-center justify-center rounded-lg bg-emerald-500 hover:bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500/50 shadow-lg shadow-emerald-500/20"
+          className="inline-flex items-center justify-center rounded-lg bg-blue-600 hover:bg-blue-700 px-6 py-2.5 text-xs font-black text-white transition-all focus:outline-none focus:ring-2 focus:ring-blue-600/50 shadow-lg shadow-blue-600/20 uppercase tracking-widest font-bebas"
         >
           <Plus className="mr-2 h-4 w-4" />
           Add Product
@@ -36,7 +36,7 @@ export default async function ProductsPage() {
             <input
               type="text"
               placeholder="Search products..."
-              className="flex h-9 w-full rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800/50 pl-9 pr-4 py-2 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all"
+              className="flex h-9 w-full rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800/50 pl-9 pr-4 py-2 text-xs text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:border-blue-600/50 focus:ring-1 focus:ring-blue-600/50 transition-all font-bold"
             />
           </div>
         </div>
@@ -81,9 +81,9 @@ export default async function ProductsPage() {
                     <td className="px-6 py-4 text-zinc-500 dark:text-zinc-400">{product.category}</td>
                     <td className="px-6 py-4">
                       <span
-                        className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium border ${
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider border ${
                           product.stockQuantity > 10
-                            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                            ? "bg-blue-600/10 text-blue-600 dark:text-blue-400 border-blue-600/20"
                             : "bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20"
                         }`}
                       >
@@ -91,11 +91,11 @@ export default async function ProductsPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-zinc-600 dark:text-zinc-300">৳{product.purchaseRate}</td>
-                    <td className="px-6 py-4 font-medium text-emerald-600 dark:text-emerald-400">৳{product.sellingPrice}</td>
+                    <td className="px-6 py-4 font-bold text-zinc-900 dark:text-zinc-100 font-outfit">৳{product.sellingPrice}</td>
                     <td className="px-6 py-4 text-right">
                       <Link
                         href={`/admin/products/${product._id.toString()}`}
-                        className="font-medium text-emerald-600 dark:text-emerald-500 hover:text-emerald-500 dark:hover:text-emerald-400 hover:underline"
+                        className="text-xs font-black text-blue-600 dark:text-blue-500 hover:text-blue-500 dark:hover:text-blue-400 uppercase tracking-widest font-bebas underline-offset-4 hover:underline"
                       >
                         Edit
                       </Link>

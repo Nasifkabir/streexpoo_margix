@@ -39,7 +39,7 @@ const SaleSchema: Schema = new Schema(
     soldBy: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: false,
     },
     date: {
       type: Date,
