@@ -10,7 +10,10 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-outfit), ui-sans-serif, system-ui;
+  --font-outfit: var(--font-outfit);
+  --font-playfair: var(--font-playfair);
+  --font-bebas: var(--font-bebas);
   --font-mono: var(--font-geist-mono);
 }
 

@@ -10,6 +10,7 @@ type Product = {
   category: string;
   stockQuantity: number;
   sellingPrice: number;
+  imageUrl?: string;
 };
 
 type CartItem = Product & {
@@ -127,9 +128,9 @@ export default function POSClient({ products: initialProducts }: POSClientProps)
       {/* LEFT PANEL: Product Selection */}
       <div className={`flex-1 flex flex-col bg-white dark:bg-[#18181b] rounded-2xl border border-zinc-200 dark:border-zinc-800/50 shadow-sm overflow-hidden ${isCartOpen ? "hidden md:flex" : "flex"}`}>
         
-        <div className="p-5 border-b border-zinc-200 dark:border-zinc-800/50">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Product Quick Search & Add</h2>
+        <div className="p-4 border-b border-zinc-200 dark:border-zinc-800/50">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-base font-black text-zinc-900 dark:text-zinc-100 font-bebas tracking-wide">PRODUCT QUICK SEARCH</h2>
           </div>
           
           <div className="flex gap-3 mb-4">
@@ -140,7 +141,7 @@ export default function POSClient({ products: initialProducts }: POSClientProps)
                 placeholder="Search..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="flex h-10 w-full rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/50 pl-10 pr-4 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all"
+                className="flex h-9 w-full rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/50 pl-10 pr-4 text-xs text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:border-blue-600/50 focus:ring-1 focus:ring-blue-600/50 transition-all"
               />
             </div>
             <button className="h-10 w-10 flex items-center justify-center rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/50 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
@@ -156,9 +157,9 @@ export default function POSClient({ products: initialProducts }: POSClientProps)
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium transition-colors border ${
+                className={`whitespace-nowrap px-3 py-1 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider transition-colors border ${
                   activeCategory === cat 
-                    ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30" 
+                    ? "bg-blue-600 text-white border-blue-600" 
                     : "bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200"
                 }`}
               >
@@ -173,16 +174,22 @@ export default function POSClient({ products: initialProducts }: POSClientProps)
             {filteredProducts.map(product => (
               <div 
                 key={product._id}
-                className="bg-zinc-50 dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800/50 overflow-hidden flex flex-col hover:border-emerald-500/50 dark:hover:border-emerald-500/50 transition-colors group"
+                className="bg-zinc-50 dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800/50 overflow-hidden flex flex-col hover:border-blue-600 transition-colors group"
               >
-                {/* Image Placeholder */}
-                <div className="h-24 md:h-32 bg-zinc-100 dark:bg-zinc-800/50 flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600 group-hover:bg-zinc-200 dark:group-hover:bg-zinc-800 transition-colors">
-                  <Package className="h-6 w-6 md:h-8 md:w-8 mb-2 opacity-50" />
-                  <span className="text-[10px] uppercase font-bold tracking-wider">{product.category}</span>
+                {/* Product Image */}
+                <div className="h-24 md:h-32 bg-zinc-100 dark:bg-zinc-800/50 flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600 group-hover:bg-zinc-200 dark:group-hover:bg-zinc-800 transition-colors relative overflow-hidden">
+                  {product.imageUrl ? (
+                    <img src={product.imageUrl} alt={product.name} className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  ) : (
+                    <>
+                      <Package className="h-6 w-6 md:h-8 md:w-8 mb-2 opacity-50" />
+                      <span className="text-[10px] uppercase font-bold tracking-wider">{product.category}</span>
+                    </>
+                  )}
                 </div>
                 
                 <div className="p-3 flex-1 flex flex-col">
-                  <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-200 line-clamp-2 leading-tight mb-2">
+                  <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-200 line-clamp-2 leading-tight mb-2 uppercase tracking-tight">
                     {product.name}
                   </h3>
                   
@@ -193,9 +200,9 @@ export default function POSClient({ products: initialProducts }: POSClientProps)
                     <button 
                       onClick={() => addToCart(product)}
                       disabled={(cart.find(c => c._id === product._id)?.cartQuantity || 0) >= product.stockQuantity}
-                      className="h-8 w-8 rounded-lg bg-emerald-500 flex items-center justify-center text-white hover:bg-emerald-600 active:scale-95 transition-all disabled:opacity-50 disabled:bg-zinc-300 dark:disabled:bg-zinc-700 disabled:cursor-not-allowed"
+                      className="h-7 w-7 rounded-lg bg-blue-600 flex items-center justify-center text-white hover:bg-blue-700 active:scale-95 transition-all disabled:opacity-50 disabled:bg-zinc-300 dark:disabled:bg-zinc-700 disabled:cursor-not-allowed"
                     >
-                      <Plus className="h-5 w-5" />
+                      <Plus className="h-4 w-4" />
                     </button>
                   </div>
                 </div>
@@ -210,7 +217,7 @@ export default function POSClient({ products: initialProducts }: POSClientProps)
         
         {isCartOpen && (
           <div className="flex items-center justify-between p-4 bg-white dark:bg-[#18181b] border-b border-zinc-200 dark:border-zinc-800/50 md:hidden">
-            <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Current Order</h2>
+            <h2 className="text-base font-black text-zinc-900 dark:text-zinc-100 font-bebas tracking-wide">CURRENT ORDER</h2>
             <button 
               onClick={() => setIsCartOpen(false)}
               className="px-4 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
@@ -221,16 +228,16 @@ export default function POSClient({ products: initialProducts }: POSClientProps)
         )}
 
         {successMessage && (
-          <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 p-4 rounded-2xl flex items-center gap-3 mx-4 md:mx-0">
-            <CheckCircle2 className="h-5 w-5" />
-            <span className="font-medium">{successMessage}</span>
+          <div className="bg-blue-600/10 border border-blue-600/20 text-blue-600 dark:text-blue-400 p-3 rounded-2xl flex items-center gap-3 mx-4 md:mx-0">
+            <CheckCircle2 className="h-4 w-4" />
+            <span className="text-sm font-bold uppercase tracking-tight">{successMessage}</span>
           </div>
         )}
 
         <div className="bg-white dark:bg-[#18181b] md:rounded-2xl border-y md:border border-zinc-200 dark:border-zinc-800/50 flex flex-col flex-1 overflow-hidden">
-          <div className="p-5 border-b border-zinc-200 dark:border-zinc-800/50 hidden md:block">
-            <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Current Order (Cart)</h2>
-            <p className="text-xs text-zinc-500 mt-1">Process customer transactions</p>
+          <div className="p-4 border-b border-zinc-200 dark:border-zinc-800/50 hidden md:block">
+            <h2 className="text-base font-black text-zinc-900 dark:text-zinc-100 font-bebas tracking-wide">CURRENT ORDER (CART)</h2>
+            <p className="text-[10px] text-zinc-500 mt-1 uppercase font-bold tracking-widest opacity-60">Process transactions</p>
           </div>
 
           {/* Cart Table Header */}
@@ -303,8 +310,8 @@ export default function POSClient({ products: initialProducts }: POSClientProps)
               <span className="font-semibold text-zinc-900 dark:text-zinc-200">৳{discount.toFixed(2)}</span>
             </div>
             
-            <button className="w-full mt-2 py-4 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-lg shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all">
-              Final Total (৳{finalTotal.toFixed(2)})
+            <button className="w-full mt-1 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-base shadow-lg shadow-blue-600/20 active:scale-[0.98] transition-all uppercase tracking-widest font-bebas">
+              FINAL TOTAL (৳{finalTotal.toFixed(2)})
             </button>
           </div>
         </div>
@@ -335,9 +342,9 @@ export default function POSClient({ products: initialProducts }: POSClientProps)
             <button 
               onClick={handleCompleteOrder}
               disabled={loading || cart.length === 0}
-              className="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 rounded-xl bg-[#0a192f] hover:bg-blue-600 text-white font-black shadow-lg shadow-blue-600/20 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-widest font-bebas"
             >
-              {loading ? <Loader2 className="h-5 w-5 animate-spin mx-auto" /> : "Complete Order"}
+              {loading ? <Loader2 className="h-5 w-5 animate-spin mx-auto" /> : "COMPLETE ORDER"}
             </button>
             
             <div className="grid grid-cols-2 gap-2">
@@ -360,11 +367,11 @@ export default function POSClient({ products: initialProducts }: POSClientProps)
         <div className="md:hidden fixed bottom-6 left-6 right-6 z-30">
           <button 
             onClick={() => setIsCartOpen(true)}
-            className="w-full py-4 rounded-xl bg-emerald-500 text-white font-bold text-lg shadow-xl shadow-emerald-500/30 active:scale-[0.98] transition-all flex items-center justify-between px-6"
+            className="w-full py-3.5 rounded-xl bg-blue-600 text-white font-black text-base shadow-xl shadow-blue-600/30 active:scale-[0.98] transition-all flex items-center justify-between px-6 font-bebas tracking-widest"
           >
             <div className="flex items-center gap-2">
-              <ShoppingCart className="h-5 w-5" />
-              <span>View Cart ({cart.reduce((sum, item) => sum + item.cartQuantity, 0)})</span>
+              <ShoppingCart className="h-4 w-4" />
+              <span>VIEW CART ({cart.reduce((sum, item) => sum + item.cartQuantity, 0)})</span>
             </div>
             <span>৳{finalTotal.toFixed(2)}</span>
           </button>

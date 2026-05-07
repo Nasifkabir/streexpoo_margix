@@ -22,49 +22,50 @@ export function StorefrontHeader({ settings, session }: { settings: any; session
       <header 
         className={`sticky top-0 z-50 transition-all duration-300 ${
           isScrolled 
-            ? "bg-white/80 dark:bg-zinc-950/80 backdrop-blur-lg border-b border-zinc-100 dark:border-zinc-800 shadow-sm py-3" 
-            : "bg-white dark:bg-zinc-950 py-5"
+            ? "bg-white/90 dark:bg-zinc-950/90 backdrop-blur-xl border-b border-zinc-100 dark:border-zinc-800 shadow-sm py-3" 
+            : "bg-white dark:bg-zinc-950 py-4 md:py-6"
         } px-4 md:px-10 flex items-center justify-between`}
       >
         <div className="flex items-center gap-4 md:gap-12">
           <button 
             onClick={() => setIsMenuOpen(true)}
-            className="md:hidden text-zinc-600 dark:text-zinc-400 hover:text-orange-500 transition-colors"
+            className="md:hidden text-zinc-600 dark:text-zinc-400 hover:text-blue-600 transition-colors"
           >
             <Menu className="h-6 w-6" />
           </button>
 
-          <Link href="/" className="flex items-center gap-2 group">
-            {settings.logoUrl ? (
-              <img src={settings.logoUrl} alt={settings.storeName} className="h-8 md:h-10 object-contain transition-transform group-hover:scale-105" />
-            ) : (
-              <span className="font-black text-2xl md:text-3xl tracking-tighter text-zinc-900 dark:text-white">
-                {(settings.storeName || "MARGIX").toUpperCase()}
-              </span>
+          <Link href="/" className="flex items-center gap-3 group">
+            {settings.logoUrl && (
+              <img src={settings.logoUrl} alt={settings.storeName} className="h-10 md:h-14 w-auto object-contain transition-transform group-hover:scale-105" />
             )}
+            <span className="font-bebas text-2xl md:text-4xl tracking-[0.05em] text-zinc-900 dark:text-white uppercase leading-none">
+              {(settings.storeName || "MARGIX")}
+            </span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-8 text-xs font-bold tracking-widest text-zinc-500 dark:text-zinc-400">
-            <Link href="#" className="hover:text-orange-500 transition-colors uppercase">MEN'S T-SHIRT</Link>
-            <Link href="#" className="hover:text-orange-500 transition-colors uppercase">SHIRT</Link>
-            <Link href="#" className="hover:text-orange-500 transition-colors uppercase">PANT</Link>
+          <nav className="hidden md:flex items-center gap-6 text-lg tracking-wider text-zinc-600 dark:text-zinc-400 font-bebas">
+            <Link href="#" className="hover:text-blue-600 transition-colors uppercase">MEN'S T-SHIRT</Link>
+            <Link href="#" className="hover:text-blue-600 transition-colors uppercase">SHIRT</Link>
+            <Link href="#" className="hover:text-blue-600 transition-colors uppercase">PANT</Link>
           </nav>
         </div>
 
         <div className="flex items-center gap-3 md:gap-6">
-          <ThemeToggle />
-          <button className="text-zinc-600 dark:text-zinc-400 hover:text-orange-500 transition-colors hidden sm:block">
+          <div className="hidden sm:block">
+            <ThemeToggle />
+          </div>
+          <button className="text-zinc-600 dark:text-zinc-400 hover:text-blue-600 transition-colors hidden md:block">
             <Search className="h-5 w-5 md:h-6 md:w-6" />
           </button>
           <Link 
             href={session ? (session.user.role === "CUSTOMER" ? "/profile" : "/admin") : "/login"} 
-            className="text-zinc-600 dark:text-zinc-400 hover:text-orange-500 transition-colors"
+            className="text-zinc-600 dark:text-zinc-400 hover:text-blue-600 transition-colors hidden sm:block"
           >
             <User className="h-5 w-5 md:h-6 md:w-6" />
           </Link>
-          <button className="text-zinc-600 dark:text-zinc-400 hover:text-orange-500 transition-colors relative group">
+          <button className="text-zinc-600 dark:text-zinc-400 hover:text-blue-600 transition-colors relative group">
             <ShoppingBag className="h-5 w-5 md:h-6 md:w-6" />
-            <span className="absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full bg-orange-500 text-[10px] font-bold text-white flex items-center justify-center border-2 border-white dark:border-zinc-950 group-hover:scale-110 transition-transform">
+            <span className="absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full bg-blue-600 text-[10px] font-bold text-white flex items-center justify-center border-2 border-white dark:border-zinc-950 group-hover:scale-110 transition-transform">
               0
             </span>
           </button>
@@ -105,34 +106,34 @@ export function StorefrontHeader({ settings, session }: { settings: any; session
             <nav className="flex-1 overflow-y-auto p-6 space-y-2">
               <Link href="#" className="flex items-center justify-between p-4 rounded-2xl hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors group">
                 <span className="font-bold text-lg text-zinc-800 dark:text-zinc-200 uppercase tracking-wide">MEN'S T-SHIRT</span>
-                <ChevronRight className="h-5 w-5 text-zinc-300 group-hover:text-orange-500 transition-colors" />
+                <ChevronRight className="h-5 w-5 text-zinc-300 group-hover:text-blue-600 transition-colors" />
               </Link>
               <Link href="#" className="flex items-center justify-between p-4 rounded-2xl hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors group">
                 <span className="font-bold text-lg text-zinc-800 dark:text-zinc-200 uppercase tracking-wide">SHIRT</span>
-                <ChevronRight className="h-5 w-5 text-zinc-300 group-hover:text-orange-500 transition-colors" />
+                <ChevronRight className="h-5 w-5 text-zinc-300 group-hover:text-blue-600 transition-colors" />
               </Link>
               <Link href="#" className="flex items-center justify-between p-4 rounded-2xl hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors group">
                 <span className="font-bold text-lg text-zinc-800 dark:text-zinc-200 uppercase tracking-wide">PANT</span>
-                <ChevronRight className="h-5 w-5 text-zinc-300 group-hover:text-orange-500 transition-colors" />
+                <ChevronRight className="h-5 w-5 text-zinc-300 group-hover:text-blue-600 transition-colors" />
               </Link>
             </nav>
 
             <div className="p-8 border-t border-zinc-100 dark:border-zinc-800 space-y-6">
               <div className="flex items-center gap-4">
                 {settings.facebookUrl && (
-                  <Link href={settings.facebookUrl} className="p-3 rounded-full bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-orange-500 hover:text-white transition-all">
+                  <Link href={settings.facebookUrl} className="p-3 rounded-full bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-blue-600 hover:text-white transition-all">
                     <Share2 className="h-5 w-5" />
                   </Link>
                 )}
                 {settings.instagramUrl && (
-                  <Link href={settings.instagramUrl} className="p-3 rounded-full bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-orange-500 hover:text-white transition-all">
+                  <Link href={settings.instagramUrl} className="p-3 rounded-full bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-blue-600 hover:text-white transition-all">
                     <Globe className="h-5 w-5" />
                   </Link>
                 )}
               </div>
               <Link 
                 href="/employee-login" 
-                className="block w-full py-4 text-center text-xs font-black tracking-widest text-zinc-400 hover:text-orange-500 border border-zinc-100 dark:border-zinc-800 rounded-2xl transition-all"
+                className="block w-full py-4 text-center text-xs font-black tracking-widest text-zinc-400 hover:text-blue-600 border border-zinc-100 dark:border-zinc-800 rounded-2xl transition-all"
               >
                 EMPLOYEE LOGIN
               </Link>

@@ -15,6 +15,7 @@ export default async function POSPage() {
     category: p.category,
     stockQuantity: p.stockQuantity,
     sellingPrice: p.sellingPrice,
+    imageUrl: p.imageUrl,
   }));
 
   return <POSClient products={products} />;
