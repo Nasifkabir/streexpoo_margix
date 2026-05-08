@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useCart } from "@/context/CartContext";
-import { useRouter } from "react-router-dom"; // Note: Next.js use useRouter from next/navigation
 import { useRouter as useNextRouter } from "next/navigation";
 import { Loader2, ArrowRight, MapPin, Phone, User, ShoppingBag, Trash2 } from "lucide-react";
 import Link from "next/link";
