@@ -6,7 +6,20 @@ import { Search, User, ShoppingBag, Menu, X, Share2, Globe, ChevronRight } from 
 import { ThemeToggle } from "./theme-toggle";
 import { useCart } from "@/context/CartContext";
 
-export function StorefrontHeader({ settings, session }: { settings: any; session: any }) {
+interface Settings {
+  storeName: string;
+  logoUrl?: string;
+  facebookUrl?: string;
+  instagramUrl?: string;
+}
+
+interface Session {
+  user: {
+    role: string;
+  };
+}
+
+export function StorefrontHeader({ settings, session }: { settings: Settings; session: Session | null }) {
   const { cartCount } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);

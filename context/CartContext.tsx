@@ -13,7 +13,7 @@ type CartItem = {
 
 type CartContextType = {
   cart: CartItem[];
-  addToCart: (product: any) => void;
+  addToCart: (product: Omit<CartItem, "quantity">) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
@@ -43,7 +43,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem("margix-cart", JSON.stringify(cart));
   }, [cart]);
 
-  const addToCart = (product: any) => {
+  const addToCart = (product: Omit<CartItem, "quantity">) => {
     setCart((prev) => {
       const existing = prev.find((item) => item._id === product._id);
       if (existing) {

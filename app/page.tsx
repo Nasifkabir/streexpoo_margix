@@ -14,15 +14,19 @@ export default async function Storefront() {
   await connectToDatabase();
   const session = await getServerSession(authOptions);
 
-  const settings = await StoreSettings.findOne({}) || {
+  const settingsDoc = await StoreSettings.findOne({});
+  const settings = JSON.parse(JSON.stringify(settingsDoc || {
     storeName: "MARGIX",
     logoUrl: "",
     footerText: "© 2025 Margix Fashion. All rights reserved.",
     currencySymbol: "৳",
-  };
+  }));
 
-  const newArrivals = await Product.find({}).sort({ createdAt: -1 }).limit(8);
-  const popularProducts = await Product.find({}).sort({ sellingPrice: -1 }).limit(4);
+  const newArrivalsRaw = await Product.find({}).sort({ createdAt: -1 }).limit(8);
+  const newArrivals = JSON.parse(JSON.stringify(newArrivalsRaw));
+  
+  const popularProductsRaw = await Product.find({}).sort({ sellingPrice: -1 }).limit(4);
+  const popularProducts = JSON.parse(JSON.stringify(popularProductsRaw));
 
   return (
     <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 font-sans selection:bg-blue-600 selection:text-white overflow-x-hidden">
@@ -111,8 +115,8 @@ export default async function Storefront() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 md:gap-x-8 gap-y-12">
-          {newArrivals.map(product => (
-            <ProductCard key={product._id.toString()} product={JSON.parse(JSON.stringify(product))} settings={settings} />
+          {newArrivals.map((product: any) => (
+            <ProductCard key={product._id} product={product} settings={settings} />
           ))}
         </div>
       </section>

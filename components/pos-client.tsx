@@ -113,8 +113,9 @@ export default function POSClient({ products: initialProducts }: POSClientProps)
       
       setTimeout(() => setSuccessMessage(""), 3000);
       
-    } catch (err: any) {
-      alert(err.message);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "An unknown error occurred";
+      alert(message);
     } finally {
       setLoading(false);
     }

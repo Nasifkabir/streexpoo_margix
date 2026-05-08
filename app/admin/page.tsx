@@ -217,7 +217,16 @@ export default async function AdminDashboard() {
   );
 }
 
-function OverviewCard({ title, value, icon, trend, trendUp, iconBg }: any) {
+interface OverviewCardProps {
+  title: string;
+  value: string;
+  icon: React.ReactNode;
+  trend: string;
+  trendUp: boolean;
+  iconBg: string;
+}
+
+function OverviewCard({ title, value, icon, trend, trendUp, iconBg }: OverviewCardProps) {
   return (
     <div className="rounded-2xl bg-white dark:bg-[#18181b] border border-zinc-200 dark:border-zinc-800/50 p-6 flex flex-col justify-between shadow-sm">
       <div className="flex items-start justify-between mb-4">

@@ -5,7 +5,20 @@ import { useToast } from "@/context/ToastContext";
 import { useRouter } from "next/navigation";
 import { ShoppingBag } from "lucide-react";
 
-export function ProductCard({ product, settings }: { product: any; settings: any }) {
+interface Product {
+  _id: string;
+  name: string;
+  category: string;
+  stockQuantity: number;
+  sellingPrice: number;
+  imageUrl?: string;
+}
+
+interface Settings {
+  currencySymbol: string;
+}
+
+export function ProductCard({ product, settings }: { product: Product; settings: Settings }) {
   const { addToCart, cart, updateQuantity, removeFromCart } = useCart();
   const { showToast } = useToast();
   const router = useRouter();
