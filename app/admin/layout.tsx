@@ -17,6 +17,7 @@ import {
   Puzzle,
   ClipboardList,
 } from "lucide-react";
+import { AdminLoginForm } from "@/components/admin-login-form";
 import SignOutButton from "./SignOutButton";
 import MobileSidebar from "@/components/mobile-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -29,12 +30,10 @@ export default async function AdminLayout({
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    redirect("/login");
+    return <AdminLoginForm />;
   }
 
-  if (session.user.role === "STAFF") {
-    redirect("/pos");
-  } else if (session.user.role !== "ADMIN") {
+  if (session.user.role !== "ADMIN") {
     redirect("/"); // Customers are redirected to storefront
   }
 
@@ -98,24 +97,24 @@ export default async function AdminLayout({
               <PackageSearch className="h-4 w-4" />
               Products
             </Link>
+            <Link
+              href="/admin/banners"
+              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors"
+            >
+              <Puzzle className="h-4 w-4" />
+              Storefront Banners
+            </Link>
             <div className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-400 dark:text-zinc-500 cursor-not-allowed">
               <Tag className="h-4 w-4" />
               Categories
             </div>
           </div>
 
-          {/* Users & Staff */}
+          {/* Users */}
           <div className="space-y-1">
             <p className="px-3 text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">
-              Staff & Users
+              Users & Payments
             </p>
-            <Link
-              href="/admin/staff"
-              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors"
-            >
-              <Users className="h-4 w-4" />
-              Staff
-            </Link>
             <div className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-400 dark:text-zinc-500 cursor-not-allowed">
               <CreditCard className="h-4 w-4" />
               Payments

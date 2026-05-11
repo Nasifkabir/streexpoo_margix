@@ -2,6 +2,10 @@ import mongoose, { Schema, Document } from "mongoose";
 
 export interface ISale extends Document {
   productId: mongoose.Types.ObjectId;
+  variant?: {
+    size: string;
+    color: string;
+  };
   quantitySold: number;
   sellingPrice: number;
   totalAmount: number;
@@ -18,6 +22,9 @@ const SaleSchema: Schema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Product",
       required: true,
+    },
+    variant: {
+      size: { type: String, enum: ["S", "M", "L", "XL", "XXL"] },
     },
     quantitySold: {
       type: Number,

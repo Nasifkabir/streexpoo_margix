@@ -9,13 +9,14 @@ type CartItem = {
   imageUrl?: string;
   quantity: number;
   stockQuantity: number;
+  size?: string;
 };
 
 type CartContextType = {
   cart: CartItem[];
   addToCart: (product: Omit<CartItem, "quantity">) => void;
-  removeFromCart: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
+  removeFromCart: (productId: string, size?: string) => void;
+  updateQuantity: (productId: string, quantity: number, size?: string) => void;
   clearCart: () => void;
   cartCount: number;
   cartTotal: number;
@@ -45,25 +46,44 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const addToCart = (product: Omit<CartItem, "quantity">) => {
     setCart((prev) => {
-      const existing = prev.find((item) => item._id === product._id);
+      const existing = prev.find(
+        (item) =>
+          item._id === product._id &&
+          item.size === product.size
+      );
+
       if (existing) {
         if (existing.quantity >= product.stockQuantity) return prev;
         return prev.map((item) =>
-          item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item
+          item._id === product._id &&
+          item.size === product.size
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
         );
       }
       return [...prev, { ...product, quantity: 1 }];
     });
   };
 
-  const removeFromCart = (productId: string) => {
-    setCart((prev) => prev.filter((item) => item._id !== productId));
+  const removeFromCart = (productId: string, size?: string) => {
+    setCart((prev) =>
+      prev.filter(
+        (item) =>
+          !(item._id === productId && item.size === size)
+      )
+    );
   };
 
-  const updateQuantity = (productId: string, quantity: number) => {
+  const updateQuantity = (
+    productId: string,
+    quantity: number,
+    size?: string
+  ) => {
     setCart((prev) =>
       prev.map((item) =>
-        item._id === productId ? { ...item, quantity: Math.max(1, quantity) } : item
+        item._id === productId && item.size === size
+          ? { ...item, quantity: Math.max(1, quantity) }
+          : item
       )
     );
   };
@@ -71,7 +91,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const clearCart = () => setCart([]);
 
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-  const cartTotal = cart.reduce((sum, item) => sum + item.sellingPrice * item.quantity, 0);
+  const cartTotal = cart.reduce(
+    (sum, item) => sum + item.sellingPrice * item.quantity,
+    0
+  );
 
   return (
     <CartContext.Provider
@@ -89,6 +112,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     </CartContext.Provider>
   );
 }
+
 
 export function useCart() {
   const context = useContext(CartContext);

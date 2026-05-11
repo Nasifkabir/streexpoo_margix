@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, CheckCircle2, XCircle } from "lucide-react";
+import { Loader2, CheckCircle2, XCircle, Trash2, Plus, ChevronDown } from "lucide-react";
 
 type ProductFormProps = {
   initialData?: {
@@ -13,6 +13,10 @@ type ProductFormProps = {
     purchaseRate: number;
     sellingPrice: number;
     imageUrl?: string;
+    variants?: {
+      size: string;
+      stockQuantity: number;
+    }[];
   };
 };
 
@@ -20,7 +24,7 @@ export function ProductForm({ initialData }: ProductFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  
+
   const [uploadingImage, setUploadingImage] = useState(false);
   const [formData, setFormData] = useState({
     name: initialData?.name || "",
@@ -29,6 +33,7 @@ export function ProductForm({ initialData }: ProductFormProps) {
     purchaseRate: initialData?.purchaseRate || 0,
     sellingPrice: initialData?.sellingPrice || 0,
     imageUrl: initialData?.imageUrl || "",
+    variants: initialData?.variants || [],
   });
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,7 +82,7 @@ export function ProductForm({ initialData }: ProductFormProps) {
       const url = initialData?._id
         ? `/api/products/${initialData._id}`
         : "/api/products";
-        
+
       const method = initialData?._id ? "PUT" : "POST";
 
       const res = await fetch(url, {
@@ -100,7 +105,7 @@ export function ProductForm({ initialData }: ProductFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8 max-w-3xl">
+    <form onSubmit={handleSubmit} className="space-y-12 max-w-4xl font-outfit">
       {error && (
         <div className="flex items-center gap-3 rounded-xl bg-red-50 dark:bg-red-900/20 p-4 text-sm text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/30">
           <XCircle className="h-5 w-5" />
@@ -108,187 +113,300 @@ export function ProductForm({ initialData }: ProductFormProps) {
         </div>
       )}
 
-      <div className="grid gap-6 md:grid-cols-2">
-        <div className="space-y-2 md:col-span-2">
-          <label htmlFor="name" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-            Product Name
-          </label>
-          <input
-            id="name"
-            name="name"
-            type="text"
-            required
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="e.g. Premium Cotton T-Shirt"
-            className="flex h-11 w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 px-4 py-2 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 dark:focus:ring-emerald-400/50 focus:border-transparent transition-all shadow-sm"
-          />
+      {/* Basic Info & Category Section */}
+      <section className="space-y-10">
+        <div className="flex items-center gap-4">
+          <div className="h-12 w-12 rounded-3xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-black text-xl font-bebas">01</div>
+          <h3 className="text-2xl font-black font-bebas tracking-wider uppercase">Product Identity</h3>
         </div>
 
-        <div className="space-y-2">
-          <label htmlFor="category" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-            Category
-          </label>
-          <select
-            id="category"
-            name="category"
-            required
-            value={formData.category}
-            onChange={handleChange}
-            className="flex h-11 w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 px-4 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 dark:focus:ring-emerald-400/50 focus:border-transparent transition-all shadow-sm appearance-none cursor-pointer"
-          >
-            <option value="T-Shirt">T-Shirt</option>
-            <option value="Shirt">Shirt</option>
-            <option value="Pant">Pant</option>
-            <option value="Hoodie">Hoodie</option>
-            <option value="Jacket">Jacket</option>
-            <option value="Accessories">Accessories</option>
-          </select>
+        <div className="bg-white dark:bg-zinc-900 rounded-[3.5rem] p-8 md:p-12 border-2 border-zinc-200 dark:border-zinc-800 shadow-sm space-y-10">
+          <div className="space-y-4 group">
+            <label htmlFor="name" className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 pl-2">
+              Product Name
+            </label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              required
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="e.g. Urban Oversized Tee"
+              className="flex h-20 w-full rounded-[2rem] border-2 border-zinc-200 dark:border-zinc-700 bg-zinc-50/10 dark:bg-zinc-950 px-8 py-2 text-xl font-black text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-300 dark:placeholder:text-zinc-800 focus:outline-none focus:border-emerald-500 transition-all"
+            />
+          </div>
+
+          <div className="space-y-6">
+            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 pl-2">
+              Select Category
+            </label>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+              {["T-Shirt", "Shirt", "Pant", "Hoodie", "Jacket", "Accessories"].map((cat) => (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setFormData(prev => ({ ...prev, category: cat }))}
+                  className={`flex flex-col items-center justify-center p-6 rounded-[2rem] border-2 transition-all duration-300 ${formData.category === cat
+                    ? "bg-[#0a192f] border-[#0a192f] text-white shadow-xl scale-[1.05]"
+                    : "bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 text-zinc-500 hover:border-zinc-900 hover:text-zinc-900 dark:hover:text-zinc-100"
+                    }`}
+                >
+                  <span className="text-xs font-black uppercase tracking-widest">{cat}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing & Inventory Section */}
+      <section className="space-y-10">
+        <div className="flex items-center gap-4">
+          <div className="h-12 w-12 rounded-3xl bg-blue-500/10 text-blue-600 flex items-center justify-center font-black text-xl font-bebas">02</div>
+          <h3 className="text-2xl font-black font-bebas tracking-wider uppercase">Pricing & Stock</h3>
         </div>
 
-        <div className="space-y-2">
-          <label htmlFor="stockQuantity" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-            Stock Quantity
-          </label>
-          <input
-            id="stockQuantity"
-            name="stockQuantity"
-            type="number"
-            min="0"
-            required
-            value={formData.stockQuantity}
-            onChange={handleChange}
-            className="flex h-11 w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 px-4 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 dark:focus:ring-emerald-400/50 focus:border-transparent transition-all shadow-sm"
-          />
+        <div className="grid gap-8 lg:grid-cols-3">
+          {/* Pricing Card */}
+          <div className="lg:col-span-2 bg-white dark:bg-zinc-900 rounded-[3.5rem] p-8 md:p-12 border-2 border-zinc-200 dark:border-zinc-800 shadow-sm grid sm:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <label htmlFor="purchaseRate" className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 pl-2">
+                Cost Price (৳)
+              </label>
+              <div className="relative">
+                <input
+                  id="purchaseRate"
+                  name="purchaseRate"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  required
+                  value={formData.purchaseRate || ""}
+                  onChange={handleChange}
+                  className="w-full h-20 bg-zinc-50/10 dark:bg-zinc-950 rounded-[2rem] border-2 border-zinc-200 dark:border-zinc-700 px-8 text-2xl font-black text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-emerald-500 transition-all"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <label htmlFor="sellingPrice" className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 pl-2">
+                Selling Price (৳)
+              </label>
+              <div className="relative">
+                <input
+                  id="sellingPrice"
+                  name="sellingPrice"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  required
+                  value={formData.sellingPrice || ""}
+                  onChange={handleChange}
+                  className="w-full h-20 bg-zinc-50/10 dark:bg-zinc-950 rounded-[2rem] border-2 border-zinc-200 dark:border-zinc-700 px-8 text-2xl font-black text-emerald-600 dark:text-emerald-400 focus:outline-none focus:border-emerald-500 transition-all"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Main Stock Card */}
+          <div className="bg-[#0a192f] dark:bg-emerald-600 rounded-[3.5rem] p-8 md:p-12 shadow-2xl text-white flex flex-col justify-between">
+            <div className="space-y-2">
+              <label htmlFor="stockQuantity" className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400 opacity-70">
+                Total Units In Stock
+              </label>
+              <input
+                id="stockQuantity"
+                name="stockQuantity"
+                type="number"
+                min="0"
+                required
+                readOnly={formData.variants.length > 0}
+                value={formData.stockQuantity || ""}
+                onChange={handleChange}
+                className={`w-full bg-transparent border-none p-0 text-5xl font-black text-white focus:ring-0 ${formData.variants.length > 0 ? "cursor-not-allowed opacity-50" : ""}`}
+              />
+            </div>
+            {formData.variants.length > 0 ? (
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] bg-white/20 px-4 py-2 rounded-full w-fit">
+                Managed by sizes
+              </p>
+            ) : (
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60">
+                Manual stock override
+              </p>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Variations Section */}
+      <section className="space-y-10">
+        <div className="flex items-center gap-4">
+          <div className="h-12 w-12 rounded-3xl bg-purple-500/10 text-purple-600 flex items-center justify-center font-black text-xl font-bebas">03</div>
+          <h3 className="text-2xl font-black font-bebas tracking-wider uppercase">Available Sizes & Stock</h3>
         </div>
 
-        <div className="space-y-2">
-          <label htmlFor="purchaseRate" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-            Purchase Rate (৳)
-          </label>
-          <input
-            id="purchaseRate"
-            name="purchaseRate"
-            type="number"
-            min="0"
-            step="0.01"
-            required
-            value={formData.purchaseRate}
-            onChange={handleChange}
-            className="flex h-11 w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 px-4 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 dark:focus:ring-emerald-400/50 focus:border-transparent transition-all shadow-sm"
-          />
-        </div>
+        <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
+          {["S", "M", "L", "XL", "XXL"].map((size) => {
+            const variantIndex = formData.variants.findIndex(v => v.size === size);
+            const isEnabled = variantIndex !== -1;
+            const stock = isEnabled ? formData.variants[variantIndex].stockQuantity : 0;
 
-        <div className="space-y-2">
-          <label htmlFor="sellingPrice" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-            Selling Price (৳)
-          </label>
-          <input
-            id="sellingPrice"
-            name="sellingPrice"
-            type="number"
-            min="0"
-            step="0.01"
-            required
-            value={formData.sellingPrice}
-            onChange={handleChange}
-            className="flex h-11 w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 px-4 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 dark:focus:ring-emerald-400/50 focus:border-transparent transition-all shadow-sm"
-          />
-        </div>
+            const toggleSize = () => {
+              setFormData(prev => {
+                let newVariants = [...prev.variants];
+                if (isEnabled) {
+                  newVariants = newVariants.filter(v => v.size !== size);
+                } else {
+                  newVariants.push({ size, stockQuantity: 0 });
+                }
+                const totalStock = newVariants.reduce((sum, v) => sum + v.stockQuantity, 0);
+                return { ...prev, variants: newVariants, stockQuantity: totalStock };
+              });
+            };
 
-        <div className="space-y-2 md:col-span-2">
-          <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-            Product Image
-          </label>
-          <div className="mt-1 flex justify-center rounded-[2rem] border border-dashed border-zinc-300 dark:border-zinc-700 px-6 pt-10 pb-10 hover:bg-zinc-50 dark:hover:bg-zinc-900/50 transition-all group">
-            <div className="space-y-1 text-center w-full">
-              {formData.imageUrl ? (
-                <div className="relative w-full max-w-sm h-64 mx-auto mb-4 rounded-3xl overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow-xl group-hover:scale-[1.02] transition-transform">
-                  <img src={formData.imageUrl} alt="Preview" className="object-cover w-full h-full" />
-                  <button 
+            const updateStock = (val: number) => {
+              setFormData(prev => {
+                const newVariants = [...prev.variants];
+                const idx = newVariants.findIndex(v => v.size === size);
+                if (idx !== -1) {
+                  newVariants[idx].stockQuantity = val;
+                }
+                const totalStock = newVariants.reduce((sum, v) => sum + v.stockQuantity, 0);
+                return { ...prev, variants: newVariants, stockQuantity: totalStock };
+              });
+            };
+
+            return (
+              <div 
+                key={size}
+                className={`relative group flex flex-col p-6 rounded-3xl border-2 transition-all duration-300 ${
+                  isEnabled 
+                    ? "bg-emerald-500 border-emerald-500 shadow-xl" 
+                    : "bg-[#0a192f] border-[#0a192f] shadow-sm"
+                }`}
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <span className={`text-2xl font-black font-bebas tracking-widest text-white`}>
+                    {size}
+                  </span>
+                  <button
                     type="button"
-                    onClick={() => setFormData({ ...formData, imageUrl: "" })}
-                    className="absolute top-4 right-4 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 shadow-lg transform hover:scale-110 transition-all"
+                    onClick={toggleSize}
+                    className={`h-8 w-8 rounded-full flex items-center justify-center transition-all duration-500 ${
+                      isEnabled 
+                        ? "bg-white text-emerald-500" 
+                        : "bg-white/20 text-white rotate-45"
+                    }`}
                   >
-                    <XCircle className="h-6 w-6" />
+                    <Plus className="h-4 w-4" />
                   </button>
                 </div>
-              ) : (
-                <div className="py-4">
-                  <div className="mx-auto h-20 w-20 rounded-3xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                    <svg
-                      className="h-10 w-10 text-zinc-400"
-                      stroke="currentColor"
-                      fill="none"
-                      viewBox="0 0 48 48"
-                      aria-hidden="true"
+
+                {isEnabled ? (
+                  <div className="space-y-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                    <p className="text-[9px] font-black text-emerald-50 uppercase tracking-[0.2em] opacity-80">Stock</p>
+                    <input
+                      type="number"
+                      min="0"
+                      value={stock || ""}
+                      onChange={(e) => updateStock(Number(e.target.value))}
+                      className="w-full h-10 bg-white rounded-xl border-none px-3 text-sm font-black text-[#0a192f] focus:ring-2 focus:ring-white/50"
+                      placeholder="0"
+                    />
+                  </div>
+                ) : (
+                  <p className="text-[10px] font-black text-white/40 uppercase tracking-widest">Inactive</p>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Image Section */}
+      <section className="space-y-10">
+        <div className="flex items-center gap-4">
+          <div className="h-12 w-12 rounded-3xl bg-orange-500/10 text-orange-600 flex items-center justify-center font-black text-xl font-bebas">04</div>
+          <h3 className="text-2xl font-black font-bebas tracking-wider uppercase">Visual Presentation</h3>
+        </div>
+
+        <div className="bg-white dark:bg-zinc-900 rounded-[3.5rem] p-12 border-2 border-zinc-200 dark:border-zinc-800 shadow-sm">
+          <div className="mt-1 flex justify-center rounded-[3.5rem] border-4 border-dashed border-zinc-200 dark:border-zinc-800 px-6 pt-16 pb-16 hover:bg-zinc-50/30 dark:hover:bg-zinc-950 transition-all duration-700 group relative overflow-hidden">
+            <div className="space-y-1 text-center w-full relative z-10">
+              {formData.imageUrl ? (
+                <div className="relative w-full max-w-sm h-80 mx-auto mb-4 rounded-[3rem] overflow-hidden border-8 border-white dark:border-zinc-950 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.2)] transition-transform group-hover:scale-[1.03] duration-700">
+                  <img src={formData.imageUrl} alt="Preview" className="object-cover w-full h-full" />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, imageUrl: "" })}
+                      className="bg-white text-red-500 p-6 rounded-full hover:bg-red-500 hover:text-white shadow-2xl transform hover:scale-110 transition-all duration-500"
                     >
-                      <path
-                        d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                        strokeWidth={2}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                      <Trash2 className="h-8 w-8" />
+                    </button>
                   </div>
                 </div>
-              )}
-              
-              {!formData.imageUrl && (
-                <div className="flex flex-col items-center">
-                  <div className="flex text-sm text-zinc-600 dark:text-zinc-400 justify-center">
+              ) : (
+                <div className="py-16">
+                  <div className="mx-auto h-32 w-32 rounded-[3rem] bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center mb-8 group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-700 shadow-inner group-hover:shadow-emerald-500/20">
+                    <Plus className="h-12 w-12 text-zinc-200 group-hover:text-white transition-colors" />
+                  </div>
+
+                  <div className="flex flex-col items-center">
                     <label
                       htmlFor="file-upload"
-                      className="relative cursor-pointer rounded-md bg-transparent font-bold text-emerald-600 dark:text-emerald-400 focus-within:outline-none hover:text-emerald-500"
+                      className="relative cursor-pointer rounded-full bg-[#0a192f] px-10 py-5 font-black text-white hover:bg-blue-600 transition-all shadow-xl hover:scale-105 uppercase tracking-[0.2em] text-xs"
                     >
-                      <span>Upload a file</span>
-                      <input 
-                        id="file-upload" 
-                        name="file-upload" 
-                        type="file" 
-                        className="sr-only" 
+                      <span>Upload Product Media</span>
+                      <input
+                        id="file-upload"
+                        name="file-upload"
+                        type="file"
+                        className="sr-only"
                         accept="image/*"
                         onChange={handleImageUpload}
                         disabled={uploadingImage}
                       />
                     </label>
-                    <p className="pl-1 font-medium">or drag and drop</p>
+                    <p className="text-[10px] text-zinc-300 font-black mt-6 uppercase tracking-[0.3em] opacity-40">
+                      PNG, JPG up to 10MB
+                    </p>
                   </div>
-                  <p className="text-xs text-zinc-500 font-medium mt-1">
-                    PNG, JPG, GIF up to 5MB
-                  </p>
-                  {uploadingImage && <p className="text-sm text-emerald-500 mt-4 flex items-center justify-center gap-2 font-bold"><Loader2 className="h-4 w-4 animate-spin"/> Uploading...</p>}
+                </div>
+              )}
+
+              {uploadingImage && (
+                <div className="absolute inset-0 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-md flex flex-col items-center justify-center z-20 rounded-[3rem]">
+                  <Loader2 className="h-16 w-16 text-[#0a192f] dark:text-emerald-500 animate-spin mb-6" />
+                  <p className="text-sm font-black text-zinc-900 dark:text-white uppercase tracking-[0.3em] animate-pulse">Syncing Media...</p>
                 </div>
               )}
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="flex items-center justify-end gap-4 pt-8 border-t border-zinc-100 dark:border-zinc-800/50">
+      <div className="flex items-center justify-end gap-6 pt-16 border-t-2 border-zinc-50 dark:border-zinc-800/50">
         <button
           type="button"
           onClick={() => router.back()}
-          className="inline-flex h-12 items-center justify-center rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-transparent px-8 py-2 text-sm font-bold text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all focus:outline-none"
+          className="inline-flex h-20 items-center justify-center rounded-[2rem] bg-transparent px-12 text-xs font-black uppercase tracking-[0.3em] text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-all"
         >
-          Cancel
+          Discard Changes
         </button>
         <button
           type="submit"
           disabled={loading}
-          className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-2xl bg-emerald-500 px-8 py-2 text-sm font-bold text-white transition-all hover:scale-[1.02] hover:bg-emerald-600 focus:outline-none active:scale-[0.98] shadow-lg shadow-emerald-500/20 disabled:pointer-events-none disabled:opacity-50"
+          className="group relative inline-flex h-20 items-center justify-center overflow-hidden rounded-[2.5rem] bg-[#0a192f] px-16 text-sm font-black uppercase tracking-[0.3em] text-white transition-all hover:scale-[1.05] hover:bg-emerald-600 shadow-[0_20px_50px_rgba(10,25,47,0.3)] disabled:pointer-events-none disabled:opacity-50"
         >
           {loading ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          ) : initialData ? (
-            <span className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4" />
-              Update Product
-            </span>
+            <Loader2 className="h-6 w-6 animate-spin" />
           ) : (
-            <span className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4" />
-              Save Product
+            <span className="flex items-center gap-3">
+              <CheckCircle2 className="h-6 w-6" />
+              {initialData ? "Commit Updates" : "Create Product"}
             </span>
           )}
         </button>
@@ -296,3 +414,4 @@ export function ProductForm({ initialData }: ProductFormProps) {
     </form>
   );
 }
+

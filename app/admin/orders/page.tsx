@@ -212,7 +212,10 @@ export default function AdminOrdersPage() {
                            <div className="h-8 w-8 rounded-lg bg-zinc-100 dark:bg-zinc-700 flex items-center justify-center text-[10px] font-black text-zinc-400">
                              {idx + 1}
                            </div>
-                           <span className="text-xs font-bold uppercase tracking-tight text-zinc-800 dark:text-zinc-200">{item.name}</span>
+                           <span className="text-xs font-bold uppercase tracking-tight text-zinc-800 dark:text-zinc-200">
+                             {item.name}
+                             {item.size && <span className="text-[10px] text-blue-600 ml-2">(Size: {item.size})</span>}
+                           </span>
                          </div>
                          <div className="flex items-center gap-6">
                            <span className="text-[10px] font-black text-zinc-400 uppercase">Qty: {item.quantity}</span>

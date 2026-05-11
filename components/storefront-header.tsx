@@ -73,7 +73,7 @@ export function StorefrontHeader({ settings, session }: { settings: Settings; se
             <Search className="h-5 w-5 md:h-6 md:w-6" />
           </button>
           <Link 
-            href={session ? (session.user.role === "CUSTOMER" ? "/profile" : "/admin") : "/login"} 
+            href={session ? "/profile" : "/login"} 
             className="text-zinc-600 dark:text-zinc-400 hover:text-blue-600 transition-colors hidden sm:block"
           >
             <User className="h-5 w-5 md:h-6 md:w-6" />
@@ -148,12 +148,6 @@ export function StorefrontHeader({ settings, session }: { settings: Settings; se
                   </Link>
                 )}
               </div>
-              <Link 
-                href="/employee-login" 
-                className="block w-full py-4 text-center text-xs font-black tracking-widest text-zinc-400 hover:text-blue-600 border border-zinc-100 dark:border-zinc-800 rounded-2xl transition-all"
-              >
-                EMPLOYEE LOGIN
-              </Link>
             </div>
           </div>
         </div>

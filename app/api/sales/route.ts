@@ -15,19 +15,8 @@ export async function GET() {
 
     await connectToDatabase();
 
-    // If STAFF, only fetch their sales for today. If ADMIN, fetch all.
+    // Fetch all sales for Admin
     const query: any = {};
-    if (session.user.role === "STAFF") {
-      query.soldBy = session.user.id;
-      
-      // Get today's start and end date
-      const startOfDay = new Date();
-      startOfDay.setHours(0, 0, 0, 0);
-      const endOfDay = new Date();
-      endOfDay.setHours(23, 59, 59, 999);
-      
-      query.date = { $gte: startOfDay, $lte: endOfDay };
-    }
 
     const sales = await Sale.find(query)
       .populate("productId", "name category")
@@ -52,7 +41,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { productId, quantitySold, sellingPrice } = body;
+    const { productId, quantitySold, sellingPrice, variant } = body;
 
     if (!productId || !quantitySold || sellingPrice === undefined) {
       return NextResponse.json(
@@ -69,18 +58,46 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
 
-    if (product.stockQuantity < quantitySold) {
-      return NextResponse.json(
-        { error: "Insufficient stock quantity" },
-        { status: 400 }
+    // Check stock based on variant if provided, otherwise check main stock
+    if (variant && variant.size) {
+      const variantInDb = product.variants.find(
+        (v: any) => v.size === variant.size
       );
+
+      if (!variantInDb) {
+        return NextResponse.json(
+          { error: `Variant ${variant.size} not found` },
+          { status: 404 }
+        );
+      }
+
+      if (variantInDb.stockQuantity < quantitySold) {
+        return NextResponse.json(
+          { error: `Insufficient stock for ${variant.size}` },
+          { status: 400 }
+        );
+      }
+
+      // Deduct from variant stock
+      variantInDb.stockQuantity -= quantitySold;
+    } else {
+      if (product.stockQuantity < quantitySold) {
+        return NextResponse.json(
+          { error: "Insufficient total stock quantity" },
+          { status: 400 }
+        );
+      }
     }
+
+    // Always deduct from main stock for total tracking
+    product.stockQuantity -= quantitySold;
 
     const totalAmount = quantitySold * sellingPrice;
     const profitMargin = (sellingPrice - product.purchaseRate) * quantitySold;
 
     const sale = new Sale({
       productId,
+      variant, // Store variant info in sale record
       quantitySold,
       sellingPrice,
       totalAmount,
@@ -88,14 +105,12 @@ export async function POST(request: NextRequest) {
       soldBy: session.user.id,
     });
 
-    // Deduct from stock
-    product.stockQuantity -= quantitySold;
-
-    // Use a transaction in production, but save sequential here for simplicity
+    // Save updates
     await product.save();
     await sale.save();
 
     return NextResponse.json(sale, { status: 201 });
+
   } catch (error) {
     console.error("Error creating sale:", error);
     return NextResponse.json(

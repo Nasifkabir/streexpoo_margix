@@ -55,7 +55,7 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       if (token) {
-        session.user.role = token.role as "ADMIN" | "STAFF" | "CUSTOMER";
+        session.user.role = token.role as "ADMIN" | "CUSTOMER";
         session.user.id = token.id as string;
       }
       return session;

@@ -28,6 +28,10 @@ export default async function EditProductPage({
     purchaseRate: product.purchaseRate,
     sellingPrice: product.sellingPrice,
     imageUrl: product.imageUrl || "",
+    variants: product.variants?.map((v: any) => ({
+      size: v.size,
+      stockQuantity: v.stockQuantity,
+    })) || [],
   };
 
   return (

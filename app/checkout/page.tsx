@@ -37,6 +37,7 @@ export default function CheckoutPage() {
             name: item.name,
             quantity: item.quantity,
             price: item.sellingPrice,
+            size: item.size,
           })),
           totalAmount: cartTotal,
         }),
@@ -163,6 +164,11 @@ export default function CheckoutPage() {
                     </div>
                     <div>
                       <h4 className="font-black text-sm uppercase tracking-tight leading-none mb-1 font-bebas">{item.name}</h4>
+                      {item.size && (
+                        <p className="text-[9px] font-bold text-blue-600 uppercase tracking-widest mb-1">
+                          Size: {item.size}
+                        </p>
+                      )}
                       <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Qty: {item.quantity}</p>
                     </div>
                   </div>

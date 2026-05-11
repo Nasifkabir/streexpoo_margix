@@ -7,6 +7,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { StorefrontHeader } from "@/components/storefront-header";
 import { ProductCard } from "@/components/product-card";
+import { BannerCarousel } from "@/components/banner-carousel";
 
 export const dynamic = 'force-dynamic';
 
@@ -38,32 +39,9 @@ export default async function Storefront() {
 
       <StorefrontHeader settings={settings} session={session} />
 
-      {/* Hero Section */}
-      <section className="px-2 md:px-10 py-4 md:py-6">
-        <div className="bg-[#0a192f] text-white rounded-[2rem] md:rounded-[3.5rem] overflow-hidden relative shadow-2xl shadow-blue-900/20">
-          <div className="max-w-[1400px] mx-auto px-4 md:px-20 pt-16 pb-0 md:pt-32 flex flex-col md:flex-row items-center justify-between min-h-[500px] md:min-h-[750px]">
-            <div className="md:w-1/2 z-10 pb-12 md:pb-24 text-center md:text-left">
-              <h1 className="text-5xl md:text-[4rem] font-black tracking-tighter leading-[0.85] mb-6 drop-shadow-2xl font-playfair italic">
-                SHOP WITH<br />STREEXPO
-              </h1>
-              <p className="text-sm md:text-lg font-bold mb-8 max-w-sm opacity-90 mx-auto md:mx-0 tracking-wide uppercase">
-                Discover our latest premium collection crafted for your unique style.
-              </p>
-              <Link href="#shop" className="group inline-flex items-center gap-3 bg-white text-zinc-900 font-black px-10 py-5 rounded-full text-sm tracking-[0.1em] hover:bg-zinc-900 hover:text-white transition-all shadow-xl hover:scale-105 active:scale-95">
-                EXPLORE NOW <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-            <div className="md:w-1/2 relative h-[400px] md:h-[700px] w-full flex items-end justify-center rounded-[2.5rem] md:rounded-[4rem] overflow-hidden shadow-2xl">
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0a192f]/40 via-transparent to-transparent z-10" />
-              <img
-                src="https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?q=80&w=800&auto=format&fit=crop"
-                alt="Model"
-                className="absolute inset-0 h-full w-full object-cover object-top scale-110"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Hero Section - Now Carousel */}
+      <BannerCarousel />
+
 
       {/* Feature Bar */}
       <section className="px-4 md:px-10 py-8 md:py-16">
@@ -184,7 +162,6 @@ export default async function Storefront() {
             <div>
               <h4 className="font-black mb-8 uppercase text-xs tracking-[0.2em] text-zinc-400">Quick Links</h4>
               <ul className="space-y-4 font-bold text-zinc-500 dark:text-zinc-400">
-                <li><Link href="/employee-login" className="hover:text-orange-500 transition-colors uppercase tracking-widest text-[10px]">Employee Access</Link></li>
                 <li className="hover:text-orange-500 transition-colors cursor-pointer uppercase tracking-widest text-[10px]">Track Order</li>
                 <li className="hover:text-orange-500 transition-colors cursor-pointer uppercase tracking-widest text-[10px]">Privacy Policy</li>
               </ul>

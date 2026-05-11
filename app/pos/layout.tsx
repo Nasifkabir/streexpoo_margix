@@ -6,6 +6,8 @@ import { Store, ChevronLeft } from "lucide-react";
 import SignOutButton from "../admin/SignOutButton";
 import { ThemeToggle } from "@/components/theme-toggle";
 
+import { AdminLoginForm } from "@/components/admin-login-form";
+
 export default async function POSLayout({
   children,
 }: {
@@ -14,14 +16,14 @@ export default async function POSLayout({
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    redirect("/login");
+    return <AdminLoginForm />;
   }
 
-  if (session.user.role === "CUSTOMER") {
+  if (session.user.role !== "ADMIN") {
     redirect("/");
   }
 
-  // Both STAFF and ADMIN can access POS
+  // Only ADMIN can access POS now
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-zinc-50 dark:bg-[#121212]">
       {/* Top Navigation for POS */}
