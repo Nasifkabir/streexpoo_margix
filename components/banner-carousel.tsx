@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { MagneticButton } from "@/components/magnetic-button";
 
 const slides = [
   {
@@ -138,12 +139,14 @@ export function BannerCarousel() {
                   <p className="text-sm md:text-lg font-bold mb-10 max-w-sm opacity-80 mx-auto md:mx-0 tracking-wide uppercase">
                     {slide.description}
                   </p>
-                  <Link 
-                    href="#shop" 
-                    className="group inline-flex items-center gap-3 bg-white text-zinc-900 font-black px-10 py-5 rounded-full text-xs md:text-sm tracking-[0.2em] hover:bg-zinc-900 hover:text-white transition-all shadow-xl hover:scale-105 active:scale-95 cursor-pointer"
-                  >
-                    {slide.buttonText} <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform" />
-                  </Link>
+                  <MagneticButton strength={25}>
+                    <Link 
+                      href="#shop" 
+                      className="group inline-flex items-center gap-3 bg-white text-zinc-900 font-black px-10 py-5 rounded-full text-xs md:text-sm tracking-[0.2em] hover:bg-zinc-900 hover:text-white transition-all shadow-xl hover:scale-105 active:scale-95 cursor-pointer"
+                    >
+                      {slide.buttonText} <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform" />
+                    </Link>
+                  </MagneticButton>
                 </div>
 
                 {/* Image Container */}

@@ -23,6 +23,7 @@ export function StorefrontHeader({ settings, session }: { settings: Settings; se
   const { cartCount } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isPopping, setIsPopping] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,6 +32,14 @@ export function StorefrontHeader({ settings, session }: { settings: Settings; se
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (cartCount > 0) {
+      setIsPopping(true);
+      const timer = setTimeout(() => setIsPopping(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [cartCount]);
 
   return (
     <>
@@ -81,7 +90,9 @@ export function StorefrontHeader({ settings, session }: { settings: Settings; se
           <Link href="/checkout" className="text-zinc-600 dark:text-zinc-400 hover:text-blue-600 transition-colors relative group">
             <ShoppingBag className="h-5 w-5 md:h-6 md:w-6" />
             {cartCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full bg-blue-600 text-[10px] font-bold text-white flex items-center justify-center border-2 border-white dark:border-zinc-950 group-hover:scale-110 transition-transform font-bebas">
+              <span className={`absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full bg-blue-600 text-[10px] font-bold text-white flex items-center justify-center border-2 border-white dark:border-zinc-950 transition-all duration-300 font-bebas ${
+                isPopping ? 'scale-150 bg-orange-500' : 'scale-100 group-hover:scale-110'
+              }`}>
                 {cartCount}
               </span>
             )}
