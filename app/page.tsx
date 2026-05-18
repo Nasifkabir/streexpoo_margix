@@ -83,6 +83,37 @@ export default async function Storefront() {
         </div>
       </section>
 
+      {/* Highlight Section */}
+      <section className="px-4 md:px-10 pb-8 md:pb-16 max-w-[1400px] mx-auto">
+        <ScrollReveal>
+          <div className="bg-gradient-to-r from-blue-600 to-[#0a192f] dark:from-zinc-900 dark:to-black rounded-[2rem] md:rounded-[3rem] p-8 md:p-14 text-white flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl relative overflow-hidden border border-blue-500/20 dark:border-zinc-800">
+            {/* Background design elements */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-400/20 rounded-full blur-2xl translate-y-1/2 -translate-x-1/4 pointer-events-none" />
+            
+            <div className="relative z-10 flex-1 text-center md:text-left">
+              <span className="inline-block px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md text-[10px] md:text-xs font-black tracking-[0.3em] uppercase mb-6 text-white border border-white/10">
+                Premium Service
+              </span>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-playfair font-black italic tracking-tighter leading-[0.9] mb-6 drop-shadow-lg">
+                NO HASSLE, <br />BUY PRODUCT <span className="text-orange-400">PAY LATER.</span>
+              </h2>
+              <p className="text-blue-50 dark:text-zinc-300 font-bold text-sm md:text-lg max-w-xl mx-auto md:mx-0 tracking-wide">
+                Just confirm your order and our Sales Executive will call you soon to finalize the details.
+              </p>
+            </div>
+            
+            <div className="relative z-10 flex items-center justify-center mt-4 md:mt-0">
+              <MagneticButton strength={20}>
+                <Link href="#shop" className="bg-white dark:bg-white text-zinc-900 hover:bg-zinc-100 px-10 py-5 rounded-full font-black text-xs md:text-sm tracking-[0.2em] uppercase transition-colors shadow-2xl flex items-center gap-3">
+                  SHOP NOW <ArrowRight className="h-5 w-5" />
+                </Link>
+              </MagneticButton>
+            </div>
+          </div>
+        </ScrollReveal>
+      </section>
+
       {/* New Arrivals */}
       <section id="shop" className="max-w-[1600px] mx-auto px-4 md:px-10 py-12 md:py-24">
         <ScrollReveal>

@@ -120,43 +120,45 @@ export function BannerCarousel() {
             }`}
           >
             <div 
-              className="text-white w-full h-full flex flex-col md:flex-row items-center justify-between transition-colors duration-1000"
+              className="text-white w-full h-full flex items-center transition-colors duration-1000 relative"
               style={{ backgroundColor: slide.bgColor }}
             >
-              <div className="max-w-[1400px] mx-auto px-6 md:px-20 pt-20 pb-10 md:pt-32 flex flex-col md:flex-row items-center justify-between w-full h-full">
+              {/* Full Background Image */}
+              <div className="absolute inset-0 z-0 overflow-hidden">
+                <img
+                  src={slide.imageUrl || slide.image}
+                  alt={slide.title}
+                  className={`w-full h-full object-cover object-center transition-transform duration-[4000ms] ease-out ${index === current ? "scale-105" : "scale-100"}`}
+                />
+                {/* Gradient Overlay for text readability */}
+                <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-transparent md:to-black/30" />
+                <div className="absolute inset-0 bg-black/30 sm:hidden" /> {/* Extra darkening for mobile */}
+              </div>
+
+              <div className="max-w-[1400px] mx-auto px-6 md:px-20 w-full h-full flex items-center relative z-20">
                 
                 {/* Text Content */}
-                <div className={`md:w-1/2 z-20 text-center md:text-left transition-all duration-700 delay-300 ${index === current ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}>
+                <div className={`md:w-2/3 lg:w-1/2 text-center md:text-left transition-all duration-700 delay-300 ${index === current ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}>
                   <span 
-                    className="inline-block mb-4 text-[10px] md:text-xs font-black tracking-[0.4em] uppercase"
-                    style={{ color: slide.accentColor }}
+                    className="inline-block mb-4 text-[10px] md:text-sm font-black tracking-[0.4em] uppercase"
+                    style={{ color: slide.accentColor || '#3b82f6' }}
                   >
                     {slide.subtitle}
                   </span>
-                  <h1 className="text-5xl md:text-[5rem] font-black tracking-tighter leading-[0.85] mb-8 drop-shadow-2xl font-playfair italic whitespace-pre-line">
+                  <h1 className="text-6xl md:text-[6rem] lg:text-[7rem] font-black tracking-tighter leading-[0.85] mb-6 drop-shadow-2xl font-playfair italic whitespace-pre-line">
                     {slide.title.replace("\\n", "\n")}
                   </h1>
-                  <p className="text-sm md:text-lg font-bold mb-10 max-w-sm opacity-80 mx-auto md:mx-0 tracking-wide uppercase">
+                  <p className="text-sm md:text-lg font-bold mb-10 max-w-md opacity-90 mx-auto md:mx-0 tracking-wide uppercase drop-shadow-md">
                     {slide.description}
                   </p>
                   <MagneticButton strength={25}>
                     <Link 
                       href="#shop" 
-                      className="group inline-flex items-center gap-3 bg-white text-zinc-900 font-black px-10 py-5 rounded-full text-xs md:text-sm tracking-[0.2em] hover:bg-zinc-900 hover:text-white transition-all shadow-xl hover:scale-105 active:scale-95 cursor-pointer"
+                      className="group inline-flex items-center gap-3 bg-white text-zinc-900 font-black px-10 py-5 rounded-full text-xs md:text-sm tracking-[0.2em] hover:bg-zinc-900 hover:text-white transition-all shadow-2xl hover:scale-105 active:scale-95 cursor-pointer"
                     >
                       {slide.buttonText} <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform" />
                     </Link>
                   </MagneticButton>
-                </div>
-
-                {/* Image Container */}
-                <div className={`md:w-1/2 relative h-[350px] md:h-[650px] w-full flex items-end justify-center rounded-[2.5rem] md:rounded-[4rem] overflow-hidden shadow-2xl mt-10 md:mt-0 transition-all duration-1000 delay-100 ${index === current ? "scale-100 opacity-100" : "scale-95 opacity-0"}`}>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
-                  <img
-                    src={slide.imageUrl || slide.image}
-                    alt={slide.title}
-                    className={`absolute inset-0 h-full w-full object-cover object-top transition-transform duration-[2000ms] ${index === current ? "scale-110" : "scale-100"}`}
-                  />
                 </div>
 
               </div>
