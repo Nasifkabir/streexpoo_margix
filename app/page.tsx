@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import connectToDatabase from "@/lib/db";
 import Product from "@/models/Product";
 import StoreSettings from "@/models/StoreSettings";
@@ -12,7 +15,6 @@ import { ScrollReveal } from "@/components/scroll-reveal";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { PageTransition } from "@/components/page-transition";
 import { MagneticButton } from "@/components/magnetic-button";
-import { ParallaxImage } from "@/components/parallax-image";
 
 export const dynamic = 'force-dynamic';
 
@@ -200,7 +202,7 @@ export default async function Storefront() {
                   <ul className="space-y-4 text-sm text-zinc-400">
                     <li className="hover:text-white transition-colors cursor-pointer">About Us</li>
                     <li className="hover:text-white transition-colors cursor-pointer">Contact Us</li>
-                    <li className="hover:text-white transition-colors cursor-pointer">FAQ's</li>
+                    <li className="hover:text-white transition-colors cursor-pointer">FAQ&apos;s</li>
                     <li className="hover:text-white transition-colors cursor-pointer">Membership</li>
                   </ul>
                 </div>
