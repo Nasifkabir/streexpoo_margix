@@ -3,6 +3,7 @@ import connectToDatabase from "@/lib/db";
 import Order from "@/models/Order";
 import Product from "@/models/Product";
 import Sale from "@/models/Sale";
+import { sendOrderConfirmationEmail, sendOrderCancellationEmail } from "@/lib/email"; // 1. Import your email helpers
 
 export async function PATCH(
   req: Request,
@@ -30,7 +31,7 @@ export async function PATCH(
           if (product.stockQuantity < item.quantity) {
             return NextResponse.json({ error: `Insufficient stock for ${product.name}` }, { status: 400 });
           }
-          
+
           // Reduce Product Stock
           product.stockQuantity -= item.quantity;
           await product.save();
@@ -50,6 +51,19 @@ export async function PATCH(
           });
         }
       }
+
+      // 2. TRIGGER CONFIRMATION EMAIL
+      try {
+        await sendOrderConfirmationEmail(
+          order.customerEmail,
+          order.customerName,
+          order.orderId,
+          order.totalAmount,
+          order.items
+        );
+      } catch (emailError) {
+        console.error("Confirmation email failed to send:", emailError);
+      }
     }
 
     // Logic for transitioning to CANCELLED from a state that already reduced stock
@@ -59,9 +73,21 @@ export async function PATCH(
         await Product.findByIdAndUpdate(item.productId, {
           $inc: { stockQuantity: item.quantity }
         });
-        
+
         // Note: In a real app, you might also want to "void" the Sale records
         // For simplicity here, we assume the margin impact is handled by confirmed sales only
+      }
+
+      // 3. TRIGGER CANCELLATION EMAIL
+      try {
+        await sendOrderCancellationEmail(
+          order.customerEmail,
+          order.customerName,
+          order.orderId,
+          order.totalAmount
+        );
+      } catch (emailError) {
+        console.error("Cancellation email failed to send:", emailError);
       }
     }
 

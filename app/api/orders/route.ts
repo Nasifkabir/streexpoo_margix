@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/db";
 import Order from "@/models/Order";
 import Product from "@/models/Product";
+import { sendOrderConfirmationEmail } from "@/lib/email"; // 1. Import your email helper
 import { v4 as uuidv4 } from "uuid";
 
 export async function POST(req: Request) {
@@ -27,6 +28,21 @@ export async function POST(req: Request) {
       totalAmount,
       status: "PENDING",
     });
+
+    // 2. Trigger the order confirmation email here
+    // Wrapping it in a try/catch prevents an email failure from breaking the checkout flow
+    try {
+      await sendOrderConfirmationEmail(
+        customerEmail,
+        customerName,
+        orderId,
+        totalAmount,
+        items // Make sure items has the structure: { name, quantity, price }
+      );
+    } catch (emailError) {
+      // Log the email error, but don't crash the request since the order is already in MongoDB
+      console.error("Failed to send order confirmation email:", emailError);
+    }
 
     // Optionally: Reduce stock (uncomment if you want automatic stock reduction on order)
     /*
