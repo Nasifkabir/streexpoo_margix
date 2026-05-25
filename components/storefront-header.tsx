@@ -96,9 +96,17 @@ export function StorefrontHeader({ settings, session }: { settings: Settings; se
           </button>
 
           <Link href="/" className="flex items-center gap-3 group">
-            <span className="font-serif text-3xl md:text-4xl text-white">
-              Streexpo
-            </span>
+            {settings?.logoUrl ? (
+              <img
+                src={settings.logoUrl}
+                alt={`${settings.storeName} Logo`}
+                className="h-12 md:h-16 w-auto object-contain"
+              />
+            ) : (
+              <span className="font-serif text-3xl md:text-4xl text-white">
+                Streexpo
+              </span>
+            )}
           </Link>
         </div>
 
@@ -220,7 +228,12 @@ export function StorefrontHeader({ settings, session }: { settings: Settings; se
 
             <nav className="flex-1 overflow-y-auto p-6 space-y-2">
               {['Eid-ul-Adha', 'Women', 'Men', 'Teen', 'Kids', 'Nargisus', 'Home Decor'].map((item) => (
-                <Link key={item} href="#" className="flex items-center justify-between p-4 rounded-2xl hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors group">
+                <Link
+                  key={item}
+                  href={`/?category=${item.toLowerCase()}#shop`}
+                  onClick={() => setIsMenuOpen(false)}
+                  className="flex items-center justify-between p-4 rounded-2xl hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors group"
+                >
                   <span className="font-bold text-lg text-zinc-800 dark:text-zinc-200 tracking-wide">{item}</span>
                   <ChevronRight className="h-5 w-5 text-zinc-300 group-hover:text-yellow-500 transition-colors" />
                 </Link>

@@ -26,7 +26,7 @@ export default async function Storefront() {
   const settings = JSON.parse(JSON.stringify(settingsDoc || {
     storeName: "MARGIX",
     logoUrl: "",
-    footerText: "© 2025 Margix Fashion. All rights reserved.",
+    footerText: "© 2025 Streexpoo_Margix Fashion. All rights reserved.",
     currencySymbol: "৳",
   }));
 
