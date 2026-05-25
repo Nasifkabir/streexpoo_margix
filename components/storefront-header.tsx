@@ -103,12 +103,9 @@ export function StorefrontHeader({ settings, session }: { settings: Settings; se
         </div>
 
         <nav className="hidden lg:flex flex-1 items-center justify-center gap-6 xl:gap-8 text-sm xl:text-[15px] font-medium text-white">
-          <Link href="#" className="hover:text-yellow-400 transition-colors">Eid</Link>
-          <Link href="#" className="hover:text-yellow-400 transition-colors">Women</Link>
-          <Link href="#" className="hover:text-yellow-400 transition-colors">Men</Link>
-          <Link href="#" className="hover:text-yellow-400 transition-colors">Teen</Link>
-          <Link href="#" className="hover:text-yellow-400 transition-colors">Kids</Link>
-          <Link href="#" className="hover:text-yellow-400 transition-colors">Nargisus</Link>
+          <Link href="/#shop" className="hover:text-yellow-400 transition-colors">Eid</Link>
+          <Link href="/#shop" className="hover:text-yellow-400 transition-colors">Women</Link>
+          <Link href="/#shop" className="hover:text-yellow-400 transition-colors">Men</Link>
         </nav>
 
         <div className="flex-1 flex items-center justify-end gap-3 md:gap-5">
@@ -117,8 +114,8 @@ export function StorefrontHeader({ settings, session }: { settings: Settings; se
               session?.user?.role === "ADMIN"
                 ? "/admin"
                 : session?.user?.role === "CUSTOMER"
-                ? "/profile"
-                : "/login"
+                  ? "/profile"
+                  : "/login"
             }
             className="text-white hover:text-yellow-400 transition-colors"
             title={session ? session.user.role === "ADMIN" ? "Admin Panel" : "My Profile" : "Sign In"}

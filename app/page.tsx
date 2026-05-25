@@ -175,72 +175,75 @@ export default async function Storefront() {
         </section>
 
         {/* Footer */}
-        <footer className="bg-[#1f1f1f] text-white px-4 md:px-10 pt-16 pb-8 border-t border-zinc-800">
+        {/* Footer */}
+        <footer className="bg-[#1f1f1f] text-white px-4 md:px-10 pt-12 md:pt-16 pb-6 border-t border-zinc-800">
           <ScrollReveal>
-            <div className="max-w-[1600px] mx-auto">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 mb-16">
+            <div className="max-w-[1400px] mx-auto">
+              <div className="flex flex-col md:flex-row justify-between items-start gap-10 md:gap-8 mb-12">
 
-                {/* Col 1 */}
-                <div className="lg:col-span-4">
-                  <Link href="/" className="font-serif text-3xl  mb-6 block text-white">
+                {/* Brand & Socials */}
+                <div className="flex flex-col gap-4">
+                  <Link href="/" className="font-serif text-3xl text-white">
                     Streexpo
                   </Link>
-                  <p className="text-zinc-300 text-sm mb-4 font-medium">Download Our App</p>
-                  <div className="flex gap-3 mb-6">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" className="h-10 bg-white rounded p-1" />
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store" className="h-10 bg-white rounded p-1" />
+                  <p className="text-zinc-400 text-sm max-w-xs">
+                    Premium fashion aesthetic designed with outstanding quality.
+                  </p>
+                  <div className="flex gap-4 mt-2">
+                    <div className="h-8 w-8 rounded-full border border-zinc-500 flex items-center justify-center text-zinc-400 hover:text-white hover:border-white transition-colors cursor-pointer">
+                      <Share2 className="h-4 w-4" />
+                    </div>
+                    <div className="h-8 w-8 rounded-full border border-zinc-500 flex items-center justify-center text-zinc-400 hover:text-white hover:border-white transition-colors cursor-pointer">
+                      <Globe className="h-4 w-4" />
+                    </div>
                   </div>
-                  <div className="flex gap-4">
-                    <div className="h-8 w-8 rounded-full border border-zinc-500 flex items-center justify-center text-zinc-400 hover:text-white hover:border-white transition-colors cursor-pointer"><Share2 className="h-4 w-4" /></div>
-                    <div className="h-8 w-8 rounded-full border border-zinc-500 flex items-center justify-center text-zinc-400 hover:text-white hover:border-white transition-colors cursor-pointer"><Globe className="h-4 w-4" /></div>
+                </div>
+
+                {/* Navigation Links */}
+                <div className="grid grid-cols-2 gap-12 w-full md:w-auto md:flex md:gap-24">
+                  {/* Company Section */}
+                  <div>
+                    <h4 className="font-medium text-lg mb-5 text-white">Company</h4>
+                    <ul className="space-y-4 text-sm text-zinc-400">
+                      <li>
+                        <Link href="/about" className="hover:text-white transition-colors">
+                          About Us
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/contact" className="hover:text-white transition-colors">
+                          Contact Us
+                        </Link>
+                      </li>
+                      {/* <li>
+                        <Link href="/faq" className="hover:text-white transition-colors">
+                          FAQ's
+                        </Link>
+                      </li> 
+                      */}
+                    </ul>
+                  </div>
+
+                  {/* Legal Section */}
+                  <div>
+                    <h4 className="font-medium text-lg mb-5 text-white">Legal</h4>
+                    <ul className="space-y-4 text-sm text-zinc-400">
+                      <li>
+                        <Link href="/privacy" className="hover:text-white transition-colors">
+                          Privacy Policy
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/terms" className="hover:text-white transition-colors">
+                          Terms & Conditions
+                        </Link>
+                      </li>
+                    </ul>
                   </div>
                 </div>
-
-                {/* Col 2 */}
-                <div className="lg:col-span-2">
-                  <h4 className="font-medium text-lg mb-6">Information</h4>
-                  <ul className="space-y-4 text-sm text-zinc-400">
-                    <li className="hover:text-white transition-colors cursor-pointer">About Us</li>
-                    <li className="hover:text-white transition-colors cursor-pointer">Contact Us</li>
-                    <li className="hover:text-white transition-colors cursor-pointer">FAQ&apos;s</li>
-                    <li className="hover:text-white transition-colors cursor-pointer">Membership</li>
-                  </ul>
-                </div>
-
-                {/* Col 3 */}
-                <div className="lg:col-span-2">
-                  <h4 className="font-medium text-lg mb-6">More</h4>
-                  <ul className="space-y-4 text-sm text-zinc-400">
-                    <li className="hover:text-white transition-colors cursor-pointer">Blog</li>
-                    <li className="hover:text-white transition-colors cursor-pointer">Privacy Policy</li>
-                    <li className="hover:text-white transition-colors cursor-pointer">Find Store</li>
-                    <li className="hover:text-white transition-colors cursor-pointer">Terms & Conditions</li>
-                  </ul>
-                </div>
-
-                {/* Col 4 */}
-                <div className="lg:col-span-4">
-                  <h4 className="font-medium text-lg mb-2">Newsletter</h4>
-                  <p className="text-sm text-zinc-400 mb-4">Be the first to know</p>
-                  <div className="flex items-center mb-4 max-w-sm">
-                    <input
-                      type="email"
-                      placeholder="Enter your email"
-                      className="flex-1 bg-transparent border border-zinc-600 px-4 py-3 text-sm text-white focus:outline-none focus:border-zinc-400"
-                    />
-                    <button className="bg-[#facc15] text-black px-5 py-3 border border-[#facc15] hover:bg-yellow-500 transition-colors">
-                      <ArrowRight className="h-5 w-5" />
-                    </button>
-                  </div>
-                  <label className="flex items-start gap-2 text-xs text-zinc-400 cursor-pointer max-w-sm">
-                    <input type="checkbox" className="mt-0.5 accent-yellow-400" />
-                    <span>By clicking subscribe, you agree to the <span className="text-white underline">Terms of Service</span> and <span className="text-white underline">Privacy policy</span>.</span>
-                  </label>
-                </div>
-
               </div>
 
-              <div className="pt-8 border-t border-zinc-800 text-center">
+              <div className="pt-6 border-t border-zinc-800 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-4">
                 <p className="text-zinc-500 text-xs">
                   © 2026 Streexpo. All Rights Reserved.
                 </p>
