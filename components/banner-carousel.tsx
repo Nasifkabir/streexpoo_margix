@@ -107,7 +107,7 @@ export function BannerCarousel() {
 
   return (
     <section className="relative w-full" onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
-      <div className="relative h-[600px] md:h-[800px] w-full overflow-hidden group">
+      <div className="relative h-[480px] sm:h-[600px] md:h-[800px] w-full overflow-hidden group">
 
         {/* Slides */}
         {banners.map((slide, index) => (
@@ -125,26 +125,26 @@ export function BannerCarousel() {
                 <img
                   src={slide.imageUrl || slide.image}
                   alt={slide.title}
-                  className={`w-full h-full object-cover object-top md:object-center transition-transform duration-[4000ms] ease-out ${index === current ? "scale-105" : "scale-100"}`}
+                  className={`w-full h-full object-cover object-[80%_center] md:object-center transition-transform duration-[4000ms] ease-out ${index === current ? "scale-105" : "scale-100"}`}
                 />
                 {/* Gradient Overlay for text readability */}
-                <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-black/20 md:to-transparent" />
               </div>
 
               <div className="max-w-[1400px] mx-auto px-6 md:px-20 w-full h-full flex items-center relative z-20">
 
                 {/* Text Content */}
-                <div className={`md:w-2/3 lg:w-1/2 pt-20 md:pt-0 text-center md:text-left transition-all duration-700 delay-300 ${index === current ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}>
-                  <h3 className="font-serif text-3xl md:text-5xl text-white mb-2 md:mb-4">
+                <div className={`md:w-2/3 lg:w-1/2 pt-16 md:pt-0 text-left transition-all duration-700 delay-300 ${index === current ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}>
+                  <h3 className="font-serif text-xl sm:text-3xl md:text-5xl text-white mb-2 md:mb-4">
                     {slide.subtitle || "Festive Glamour"}
                   </h3>
-                  <h1 className="text-4xl md:text-[5rem] lg:text-[6rem] font-black tracking-normal leading-[1] mb-1 text-[#facc15] font-sans whitespace-pre-line uppercase">
+                  <h1 className="text-4xl sm:text-5xl md:text-[5rem] lg:text-[6rem] font-black tracking-normal leading-[1.1] mb-2 md:mb-1 text-[#facc15] font-sans whitespace-pre-line uppercase">
                     {slide.title.replace("\\n", "\n")}
                   </h1>
-                  <h2 className="text-2xl md:text-4xl font-light tracking-[0.2em] text-white mb-6 md:mb-8 font-sans">
+                  <h2 className="text-sm sm:text-xl md:text-4xl font-light tracking-[0.1em] md:tracking-[0.2em] text-white mb-4 md:mb-8 font-sans max-w-xs md:mx-0">
                     {slide.description || "EXCLUSIVES"}
                   </h2>
-                  <p className="font-serif text-lg md:text-2xl text-white mb-8">
+                  <p className="font-serif text-sm sm:text-lg md:text-2xl text-white mb-6 md:mb-8">
                     Explore The Collection Now
                   </p>
 

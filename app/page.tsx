@@ -47,7 +47,7 @@ export default async function Storefront() {
 
         {/* Combined Hero & Header Section to flawlessly eliminate the gap */}
         <div className="relative w-full">
-          <div className="absolute top-0 left-0 right-0 z-50 bg-transparent">
+          <div className="absolute top-0 left-0 right-0 z-[70] bg-transparent">
             <StorefrontHeader settings={settings} session={session} />
           </div>
           <BannerCarousel />

@@ -174,7 +174,7 @@ export default function CheckoutPage() {
                   </div>
                   <div className="flex items-center gap-4">
                     <p className="font-black text-sm font-outfit">৳{item.sellingPrice * item.quantity}</p>
-                    <button onClick={() => removeFromCart(item._id)} className="text-zinc-300 hover:text-red-500 transition-colors">
+                    <button onClick={() => removeFromCart(item._id, item.size)} className="text-zinc-300 hover:text-red-500 transition-colors">
                       <Trash2 className="h-4 w-4" />
                     </button>
                   </div>

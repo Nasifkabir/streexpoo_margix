@@ -85,10 +85,7 @@ export function StorefrontHeader({ settings, session }: { settings: Settings; se
   return (
     <>
       <header
-        className={`sticky top-0 w-full z-50 transition-all duration-300 ${isScrolled
-          ? "bg-black/90 backdrop-blur-md py-3 shadow-lg"
-          : "bg-transparent py-4 md:py-6"
-          } px-4 md:px-10 flex items-center justify-between`}
+        className={`${isScrolled ? "fixed bg-black py-3 shadow-lg" : "absolute bg-transparent py-4 md:py-6"} top-0 left-0 w-full z-50 transition-all duration-300 px-4 md:px-10 flex items-center justify-between`}
       >
         <div className="flex-1 flex items-center gap-4">
           <button
@@ -112,7 +109,6 @@ export function StorefrontHeader({ settings, session }: { settings: Settings; se
           <Link href="#" className="hover:text-yellow-400 transition-colors">Teen</Link>
           <Link href="#" className="hover:text-yellow-400 transition-colors">Kids</Link>
           <Link href="#" className="hover:text-yellow-400 transition-colors">Nargisus</Link>
-          <Link href="#" className="hover:text-yellow-400 transition-colors">Home Decor</Link>
         </nav>
 
         <div className="flex-1 flex items-center justify-end gap-3 md:gap-5">
