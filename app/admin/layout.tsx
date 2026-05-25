@@ -16,6 +16,7 @@ import {
   Bell,
   Puzzle,
   ClipboardList,
+  ShieldCheck,
 } from "lucide-react";
 import { AdminLoginForm } from "@/components/admin-login-form";
 import SignOutButton from "./SignOutButton";
@@ -133,6 +134,13 @@ export default async function AdminLayout({
               <Settings className="h-5 w-5" />
               Store Settings
             </Link>
+            <Link
+              href="/admin/account"
+              className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors"
+            >
+              <ShieldCheck className="h-5 w-5" />
+              My Account
+            </Link>
           </div>
         </div>
 
@@ -155,7 +163,10 @@ export default async function AdminLayout({
           </div>
           <div className="flex items-center gap-4">
             <ThemeToggle />
-            <div className="flex items-center gap-3 bg-zinc-100 dark:bg-zinc-800/50 rounded-full pl-2 pr-4 py-1.5 border border-zinc-200 dark:border-zinc-700/50 cursor-pointer hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors">
+            <Link
+              href="/admin/account"
+              className="flex items-center gap-3 bg-zinc-100 dark:bg-zinc-800/50 rounded-full pl-2 pr-4 py-1.5 border border-zinc-200 dark:border-zinc-700/50 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors"
+            >
               <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-black text-sm">
                 {session.user.name?.charAt(0) || "A"}
               </div>
@@ -163,7 +174,7 @@ export default async function AdminLayout({
                 <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 leading-none">{session.user.name || "Admin"}</span>
                 <span className="text-xs text-zinc-500 dark:text-zinc-400">{session.user.email}</span>
               </div>
-            </div>
+            </Link>
           </div>
         </header>
 

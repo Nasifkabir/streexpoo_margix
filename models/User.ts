@@ -5,6 +5,8 @@ export interface IUser extends Document {
   email: string;
   password?: string;
   role: "ADMIN" | "CUSTOMER";
+  resetPasswordToken?: string;
+  resetPasswordExpiry?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -26,8 +28,16 @@ const UserSchema: Schema = new Schema(
     },
     password: {
       type: String,
-      required: false, // In case we add OAuth later
-      select: false, // Don't return password by default
+      required: false,
+      select: false,
+    },
+    resetPasswordToken: {
+      type: String,
+      select: false,
+    },
+    resetPasswordExpiry: {
+      type: Date,
+      select: false,
     },
     role: {
       type: String,

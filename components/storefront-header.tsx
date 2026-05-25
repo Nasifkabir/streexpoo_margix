@@ -113,8 +113,15 @@ export function StorefrontHeader({ settings, session }: { settings: Settings; se
 
         <div className="flex-1 flex items-center justify-end gap-3 md:gap-5">
           <Link
-            href={session ? "/admin" : "/register"}
+            href={
+              session?.user?.role === "ADMIN"
+                ? "/admin"
+                : session?.user?.role === "CUSTOMER"
+                ? "/profile"
+                : "/login"
+            }
             className="text-white hover:text-yellow-400 transition-colors"
+            title={session ? session.user.role === "ADMIN" ? "Admin Panel" : "My Profile" : "Sign In"}
           >
             <User className="h-5 w-5 md:h-[22px] md:w-[22px]" />
           </Link>
