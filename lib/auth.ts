@@ -27,6 +27,11 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Invalid email or password");
         }
 
+        // Block banned users from logging in
+        if (user.status === "BANNED") {
+          throw new Error("BANNED");
+        }
+
         const isPasswordCorrect = await bcrypt.compare(
           credentials.password,
           user.password
@@ -48,8 +53,22 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
+        // Initial sign-in: populate token from user object
         token.role = user.role;
         token.id = user.id;
+        token.name = user.name;
+        token.banned = false;
+      } else if (token.id) {
+        // Subsequent requests: re-check ban status from database
+        // This ensures banning a logged-in user takes effect immediately
+        try {
+          await connectToDatabase();
+          const dbUser = await User.findById(token.id).select("status").lean();
+          token.banned = dbUser?.status === "BANNED";
+        } catch {
+          // If DB check fails, keep the existing token state
+          // Do NOT default to banned to prevent lockouts on DB errors
+        }
       }
       return token;
     },
@@ -57,6 +76,8 @@ export const authOptions: NextAuthOptions = {
       if (token) {
         session.user.role = token.role as "ADMIN" | "CUSTOMER";
         session.user.id = token.id as string;
+        session.user.name = token.name as string;
+        session.user.banned = token.banned as boolean;
       }
       return session;
     },
@@ -66,6 +87,7 @@ export const authOptions: NextAuthOptions = {
   },
   session: {
     strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   secret: process.env.NEXTAUTH_SECRET,
 };

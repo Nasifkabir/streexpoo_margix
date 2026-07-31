@@ -5,6 +5,7 @@ export interface IUser extends Document {
   email: string;
   password?: string;
   role: "ADMIN" | "CUSTOMER";
+  status: "ACTIVE" | "BANNED";
   resetPasswordToken?: string;
   resetPasswordExpiry?: Date;
   createdAt: Date;
@@ -43,6 +44,11 @@ const UserSchema: Schema = new Schema(
       type: String,
       enum: ["ADMIN", "CUSTOMER"],
       default: "CUSTOMER",
+    },
+    status: {
+      type: String,
+      enum: ["ACTIVE", "BANNED"],
+      default: "ACTIVE",
     },
   },
   { timestamps: true }

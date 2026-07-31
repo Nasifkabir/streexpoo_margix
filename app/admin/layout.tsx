@@ -116,6 +116,13 @@ export default async function AdminLayout({
             <p className="px-3 text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">
               Users & Payments
             </p>
+            <Link
+              href="/admin/customers"
+              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors"
+            >
+              <Users className="h-4 w-4" />
+              Customers
+            </Link>
             <div className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-400 dark:text-zinc-500 cursor-not-allowed">
               <CreditCard className="h-4 w-4" />
               Payments

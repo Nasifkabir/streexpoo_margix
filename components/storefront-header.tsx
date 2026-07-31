@@ -21,6 +21,7 @@ interface Settings {
 
 interface Session {
   user: {
+    name?: string;
     role: string;
   };
 }
@@ -117,19 +118,26 @@ export function StorefrontHeader({ settings, session }: { settings: Settings; se
         </nav>
 
         <div className="flex-1 flex items-center justify-end gap-3 md:gap-5">
-          <Link
-            href={
-              session?.user?.role === "ADMIN"
-                ? "/admin"
-                : session?.user?.role === "CUSTOMER"
-                  ? "/profile"
-                  : "/login"
-            }
-            className="text-white hover:text-yellow-400 transition-colors"
-            title={session ? session.user.role === "ADMIN" ? "Admin Panel" : "My Profile" : "Sign In"}
-          >
-            <User className="h-5 w-5 md:h-[22px] md:w-[22px]" />
-          </Link>
+          {session?.user ? (
+            <Link
+              href="/profile"
+              className="flex items-center gap-2 text-white hover:text-yellow-400 transition-colors group"
+              title="My Profile"
+            >
+              <span className="text-sm font-bold uppercase tracking-widest hidden sm:block">
+                {session.user.name}
+              </span>
+              <User className="h-5 w-5 md:h-[22px] md:w-[22px]" />
+            </Link>
+          ) : (
+            <Link
+              href="/login"
+              className="text-white hover:text-yellow-400 transition-colors group"
+              title="Sign In"
+            >
+              <User className="h-5 w-5 md:h-[22px] md:w-[22px]" />
+            </Link>
+          )}
 
           {/* Search */}
           <div className="relative" ref={searchRef}>

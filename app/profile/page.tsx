@@ -132,9 +132,21 @@ export default function ProfilePage() {
               {session?.user?.name}
             </h1>
             <p className="text-blue-200 text-sm font-medium mt-1">{session?.user?.email}</p>
-            <div className="mt-3 inline-flex items-center gap-2 bg-white/10 rounded-full px-3 py-1">
-              <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-xs font-bold text-white uppercase tracking-widest">Member</span>
+            <div className="mt-3 flex flex-wrap items-center gap-3">
+              <div className="inline-flex items-center gap-2 bg-white/10 rounded-full px-3 py-1">
+                <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-xs font-bold text-white uppercase tracking-widest">
+                  {session?.user?.role === "ADMIN" ? "Admin" : "Member"}
+                </span>
+              </div>
+              {session?.user?.role === "ADMIN" && (
+                <Link
+                  href="/admin"
+                  className="inline-flex items-center gap-1.5 bg-yellow-500 text-[#0a192f] text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full hover:bg-yellow-400 transition-colors shadow-lg"
+                >
+                  Admin Panel <ChevronRight className="h-3 w-3" />
+                </Link>
+              )}
             </div>
           </div>
           <div className="text-right hidden sm:block">

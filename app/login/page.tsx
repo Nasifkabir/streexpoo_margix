@@ -20,6 +20,24 @@ export default function CustomerLoginPage() {
     setError("");
 
     try {
+      // Pre-check: verify the account is not banned before attempting sign-in.
+      // NextAuth v4 sanitizes errors from authorize(), so "BANNED" never reaches
+      // the client via res.error — we must check status separately.
+      const statusRes = await fetch("/api/auth/check-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const statusData = await statusRes.json();
+
+      if (statusData.status === "BANNED") {
+        setError(
+          "Your account has been suspended. Please contact our customer support team for assistance."
+        );
+        setLoading(false);
+        return;
+      }
+
       const res = await signIn("credentials", {
         redirect: false,
         email,
@@ -27,7 +45,7 @@ export default function CustomerLoginPage() {
       });
 
       if (res?.error) {
-        setError("Invalid email or password");
+        setError("Invalid email or password. Please try again.");
         setLoading(false);
         return;
       }
@@ -35,7 +53,7 @@ export default function CustomerLoginPage() {
       router.push("/");
       router.refresh();
     } catch {
-      setError("An unexpected error occurred");
+      setError("An unexpected error occurred. Please try again.");
       setLoading(false);
     }
   };

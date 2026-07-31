@@ -1,0 +1,130 @@
+# Streexpoo Margix: Technical Architecture & System Documentation
+
+## 1. Executive Summary & Project Footprint
+
+### Core Purpose
+**Streexpoo Margix** is a modern, full-stack e-commerce web application. It acts as a comprehensive storefront and management system, allowing customers to browse fashion products, place orders, and manage their profiles. Simultaneously, it provides administrators with a robust backend panel to manage inventory (products), track and process orders, customize the storefront visually (banners and settings), and view analytics.
+
+### The Tech Stack
+*   **Frontend Framework:** Next.js 16 (App Router) combined with React 19.
+*   **Styling & UI:** Tailwind CSS v4, utilizing Lucide React for iconography. Data visualization in the admin dashboard is powered by Recharts.
+*   **Backend Environment:** Next.js API Routes (Node.js runtime environment), tightly coupling the API layer with the frontend application in a monolithic repository.
+*   **Database & ORM:** MongoDB, managed via the Mongoose ODM (v9.6.1). Database schemas are strictly typed using TypeScript interfaces to ensure data integrity.
+*   **Authentication:** NextAuth.js (v4) utilizing a JWT-based Credentials Provider and `bcryptjs` for secure password hashing.
+*   **Key Utilities:** `nodemailer` for transactional emails (order confirmations, password resets), `uuid` for unique identifiers, and `jspdf` for client-side PDF invoice/report generation.
+
+---
+
+## 2. Architecture & File Directory Mapping
+
+The application follows a **Monolithic Feature-based Architecture** utilizing the Next.js App Router design pattern. This isolates the backend logic, the client-facing storefront, and the protected admin interface within the same repository.
+
+### Core Directory Map
+```text
+c:\Users\nasif\streexpoo_margix\
+├── app/                  # Next.js App Router entry points & page routes
+│   ├── admin/            # Protected Admin Dashboard routes (Orders, Products, Settings)
+│   ├── api/              # Backend API layer (RESTful endpoints)
+│   ├── checkout/         # Customer purchase flow routes
+│   ├── profile/          # Customer account management routes
+│   ├── pos/              # Point of Sale interface (Admin/Staff)
+│   ├── login/, register/ # Authentication pages
+│   └── globals.css       # Global stylesheet with Tailwind utilities
+├── components/           # Reusable UI components (Headers, Carousels, Forms)
+├── context/              # React Context providers (State Management)
+├── lib/                  # Core utility functions and configuration
+│   ├── auth.ts           # NextAuth configuration and Credentials logic
+│   ├── db.ts             # Mongoose MongoDB connection pooling
+│   └── email.ts          # Nodemailer SMTP transporter logic
+├── models/               # Mongoose Database Schemas (Data Layer)
+│   ├── Banner.ts         # Storefront carousel banners
+│   ├── Order.ts          # Customer transactions
+│   ├── Product.ts        # Inventory models with variant tracking
+│   ├── Sale.ts           # Record of completed sales
+│   ├── StoreSettings.ts  # Global store configuration singleton
+│   └── User.ts           # Authentication and Role-based access control
+└── package.json          # Project dependencies and execution scripts
+```
+
+**Architectural Separation:**
+*   **Business Logic:** Primarily resides in `app/api/` (Controllers) and `lib/` (Services).
+*   **Data Models:** Isolated in the `models/` directory using Mongoose Schemas.
+*   **UI Presentation:** Segmented between `app/` (Page layouts) and `components/` (Reusable React components).
+
+---
+
+## 3. Comprehensive API Registry & Routing Mechanics
+
+The routing architecture utilizes **Next.js Route Handlers** (`app/api/**/route.ts`). The API is embedded within the full-stack framework, meaning requests are handled seamlessly by the Next.js Node server without requiring a decoupled Express/NestJS backend.
+
+### API Inventory
+
+| HTTP Method | Endpoint | Purpose |
+| :--- | :--- | :--- |
+| **Auth & Users** | | |
+| `POST` | `/api/auth/register` | Registers a new user. Payload: `{ name, email, password }`. |
+| `POST` | `/api/auth/forgot-password` | Initiates password reset flow via Nodemailer. |
+| `POST` | `/api/auth/reset-password` | Resets password using a secure token. |
+| `POST` | `/api/auth/change-password` | Updates password for authenticated users. |
+| **Products & Inventory** | | |
+| `GET` | `/api/products` | Retrieves catalog of products. |
+| `POST` | `/api/products` | Admin: Creates a new product. Payload: `IProduct`. |
+| `PUT` | `/api/products/[id]` | Admin: Updates an existing product's details. |
+| `DELETE` | `/api/products/[id]` | Admin: Deletes a product from the database. |
+| **Orders & Transactions** | | |
+| `GET` | `/api/orders` | Admin: Retrieves all orders. |
+| `POST` | `/api/orders` | Customer: Places a new order. Payload includes customer details and `items`. |
+| `GET` | `/api/orders/my-orders` | Customer: Retrieves order history for the logged-in session. |
+| `PATCH` | `/api/orders/[id]` | Admin: Updates order status (e.g., PENDING to SHIPPED). |
+| `DELETE` | `/api/orders/[id]` | Admin: Cancels or removes an order. |
+| **Store Management** | | |
+| `GET` | `/api/settings` | Retrieves global store settings (contact info, logo). |
+| `PUT` | `/api/settings` | Admin: Updates store settings singleton. |
+| `GET` | `/api/banners` | Retrieves active storefront banners. |
+| `POST` | `/api/banners` | Admin: Uploads/creates a new promotional banner. |
+| `PATCH` | `/api/banners/[id]` | Admin: Updates banner visibility or details. |
+| `DELETE` | `/api/banners/[id]` | Admin: Deletes a banner. |
+| **Sales & POS** | | |
+| `GET` | `/api/sales` | Admin: Retrieves historical sales data. |
+| `POST` | `/api/sales` | Admin/POS: Records a direct sale transaction. |
+| `POST` | `/api/upload` | Utility: Handles multipart/form-data image uploads. |
+
+---
+
+## 4. Core Operational Workflows (Step-by-Step Logic)
+
+### User Creation & Auth Flow
+1. **Registration:** Customer submits credentials to `POST /api/auth/register`. The server validates existence, hashes the password via `bcrypt`, forces the `CUSTOMER` role, and saves to MongoDB.
+2. **Authentication:** Customer logs in via `/login`. NextAuth's `CredentialsProvider` (`lib/auth.ts`) executes. It connects to MongoDB, retrieves the user (forcing password inclusion via `.select("+password")`), compares the hash, and returns the user payload.
+3. **Session Management:** NextAuth generates a JWT containing the user's `id` and `role`, embedding this into the session cookie. Protected API routes verify this session via `getServerSession()`.
+
+### Customer Purchase Flow
+1. **Cart & Checkout:** The user builds a cart client-side. Upon checkout, a request is sent to `POST /api/orders` containing shipping details and `items` array.
+2. **Order Processing:** The API generates a clean, readable Order ID (`STX-12345`). A new `Order` document is created in MongoDB with a default `PENDING` status.
+3. **Asynchronous Notification:** The server triggers `sendOrderConfirmationEmail` via Nodemailer (`lib/email.ts`). This is wrapped in a `try/catch` block to ensure that an SMTP failure does not crash the database transaction.
+4. *(Note: Inventory deduction is currently commented out in the codebase, meaning stock levels must be managed manually or via the POS system).*
+
+### Admin Panel Capabilities
+1. **Access Control:** Navigating to `app/admin/*` triggers layout checks against the NextAuth session, ensuring the user has the `ADMIN` role.
+2. **Order Fulfillment:** The admin views incoming orders on the dashboard. They can trigger `PATCH /api/orders/[id]` to mutate the order state (e.g., to `DELIVERED`).
+3. **Store Customization:** The admin navigates to Settings or Banners. Mutating these values fires off to `PUT /api/settings` or `POST /api/banners`, dynamically altering the customer-facing storefront's layout immediately.
+
+---
+
+## 5. "How It Was Built" & Structural Appraisal
+
+### Strong Architectural Patterns
+*   **Strong Type Safety:** The usage of detailed Mongoose Interfaces (e.g., `IProduct`, `IVariant`) perfectly aligns with Next.js TypeScript conventions, minimizing runtime database errors.
+*   **Resilient Email Logic:** Encapsulating the Nodemailer function in the order API within a non-blocking `try/catch` ensures high availability of the checkout funnel even if SMTP servers face downtime.
+*   **Centralized NextAuth Provider:** Moving auth configuration to `lib/auth.ts` rather than cluttering the Route Handler promotes clean code and easy role-based middleware integration.
+
+### Immediate Areas for Optimization & Security Hardening
+1. **Client-Side Pricing Trust (Critical Security Flaw):**
+   In `app/api/orders/route.ts`, the `POST` request accepts `totalAmount` directly from the client payload:
+   `const { ..., items, totalAmount } = body;`
+   *Vulnerability:* A malicious actor could intercept the network request and modify `totalAmount` to `$1`.
+   *Fix:* The server must iterate over the `items` array, query `Product.findById(item.productId)` for the current `sellingPrice`, and calculate the total amount server-side.
+2. **Atomic Inventory Management:**
+   Stock reduction in the order API is currently commented out. When enabled, using `$inc: { stockQuantity: -item.quantity }` inside a `for` loop is prone to race conditions if multiple users buy the last item simultaneously. A MongoDB Transaction Session is recommended here.
+3. **Environment Variable Validations:**
+   The application assumes `process.env.NEXTAUTH_SECRET` and SMTP variables exist. Implementing a library like `zod` at application startup to enforce environment variable schemas will prevent obscure production crashes.
