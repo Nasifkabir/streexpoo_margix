@@ -295,11 +295,18 @@ export default function CustomerDetailsPage() {
                 <select
                   value={status}
                   onChange={(e) => setStatus(e.target.value)}
+                  disabled={user.role === "ADMIN" && status !== "BANNED"}
                   className="w-full px-4 py-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-sm focus:outline-none focus:border-blue-500 text-zinc-900 dark:text-white"
                 >
                   <option value="ACTIVE">✅ ACTIVE — Normal Access</option>
                   <option value="BANNED">🚫 BANNED — Prevent Login</option>
                 </select>
+                {user.role === "ADMIN" && (
+                  <p className="text-xs text-zinc-500">
+                    Admin accounts cannot be banned. A previously banned admin
+                    account can be restored here.
+                  </p>
+                )}
               </div>
 
               <button

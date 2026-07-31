@@ -5,6 +5,22 @@ import connectToDatabase from "@/lib/db";
 import User from "@/models/User";
 import bcrypt from "bcryptjs";
 
+const ACCOUNT_STATUSES = new Set(["ACTIVE", "BANNED"]);
+
+function unauthorizedResponse(session: Awaited<ReturnType<typeof getServerSession>>) {
+  if (!session) {
+    return NextResponse.json(
+      { error: "Your session has expired. Please sign in again." },
+      { status: 401 }
+    );
+  }
+
+  return NextResponse.json(
+    { error: "Admin access is required." },
+    { status: 403 }
+  );
+}
+
 export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -13,7 +29,7 @@ export async function PUT(
     const session = await getServerSession(authOptions);
 
     if (!session || session.user.role !== "ADMIN") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+      return unauthorizedResponse(session);
     }
 
     const { id } = await params;
@@ -30,7 +46,25 @@ export async function PUT(
 
     if (name !== undefined) user.name = name;
     if (email !== undefined) user.email = email;
-    if (status !== undefined) user.status = status;
+    if (status !== undefined) {
+      if (!ACCOUNT_STATUSES.has(status)) {
+        return NextResponse.json(
+          { error: "Invalid account status." },
+          { status: 400 }
+        );
+      }
+
+      // Admins are the only users who can reverse a ban. Allowing an admin
+      // account to be banned can lock the entire dashboard out permanently.
+      if (user.role === "ADMIN" && status === "BANNED") {
+        return NextResponse.json(
+          { error: "Admin accounts cannot be banned." },
+          { status: 409 }
+        );
+      }
+
+      user.status = status;
+    }
 
     if (password) {
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -57,18 +91,27 @@ export async function DELETE(
     const session = await getServerSession(authOptions);
 
     if (!session || session.user.role !== "ADMIN") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+      return unauthorizedResponse(session);
     }
 
     const { id } = await params;
 
     await connectToDatabase();
 
-    const deletedUser = await User.findByIdAndDelete(id);
+    const user = await User.findById(id).select("role");
 
-    if (!deletedUser) {
+    if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
+
+    if (user.role === "ADMIN") {
+      return NextResponse.json(
+        { error: "Admin accounts cannot be deleted." },
+        { status: 409 }
+      );
+    }
+
+    await user.deleteOne();
 
     return NextResponse.json({ message: "User deleted successfully" });
   } catch (error) {

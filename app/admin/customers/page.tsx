@@ -71,6 +71,10 @@ export default function CustomersPage() {
     setModal((prev) => ({ ...prev, open: false }));
 
   const openBanModal = (user: User) => {
+    if (user.role === "ADMIN" && user.status !== "BANNED") {
+      return;
+    }
+
     const isBanned = user.status === "BANNED";
     setModal({
       open: true,
@@ -325,26 +329,28 @@ export default function CustomersPage() {
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <button
-                          onClick={() => openBanModal(user)}
-                          disabled={banningId === user._id}
-                          className={`p-2 rounded-lg transition-colors disabled:opacity-50 ${
-                            user.status === "BANNED"
-                              ? "text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/20"
-                              : "text-zinc-400 hover:text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-900/20"
-                          }`}
-                          title={
-                            user.status === "BANNED" ? "Unban User" : "Ban User"
-                          }
-                        >
-                          {banningId === user._id ? (
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                          ) : user.status === "BANNED" ? (
-                            <ShieldCheck className="h-4 w-4" />
-                          ) : (
-                            <ShieldAlert className="h-4 w-4" />
-                          )}
-                        </button>
+                        {(user.role !== "ADMIN" || user.status === "BANNED") && (
+                          <button
+                            onClick={() => openBanModal(user)}
+                            disabled={banningId === user._id}
+                            className={`p-2 rounded-lg transition-colors disabled:opacity-50 ${
+                              user.status === "BANNED"
+                                ? "text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/20"
+                                : "text-zinc-400 hover:text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-900/20"
+                            }`}
+                            title={
+                              user.status === "BANNED" ? "Unban User" : "Ban User"
+                            }
+                          >
+                            {banningId === user._id ? (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : user.status === "BANNED" ? (
+                              <ShieldCheck className="h-4 w-4" />
+                            ) : (
+                              <ShieldAlert className="h-4 w-4" />
+                            )}
+                          </button>
+                        )}
                         <Link
                           href={`/admin/customers/${user._id}`}
                           className="p-2 rounded-lg text-zinc-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
@@ -352,7 +358,7 @@ export default function CustomersPage() {
                         >
                           <Eye className="h-4 w-4" />
                         </Link>
-                        <button
+                        {user.role !== "ADMIN" && <button
                           onClick={() => openDeleteModal(user)}
                           disabled={deletingId === user._id}
                           className="p-2 rounded-lg text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-50"
@@ -363,7 +369,7 @@ export default function CustomersPage() {
                           ) : (
                             <Trash2 className="h-4 w-4" />
                           )}
-                        </button>
+                        </button>}
                       </div>
                     </td>
                   </tr>
