@@ -8,6 +8,7 @@ export interface IVariant {
 export interface IProduct extends Document {
   name: string;
   category: string;
+  description?: string;
   stockQuantity: number;
   purchaseRate: number;
   sellingPrice: number;
@@ -28,6 +29,10 @@ const ProductSchema: Schema = new Schema(
       type: String,
       required: [true, "Please provide a category"],
       trim: true,
+    },
+    description: {
+      type: String,
+      default: "",
     },
     stockQuantity: {
       type: Number,

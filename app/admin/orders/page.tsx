@@ -14,10 +14,14 @@ export default function AdminOrdersPage() {
   const fetchOrders = async () => {
     try {
       const res = await fetch("/api/orders");
+      if (!res.ok) {
+        throw new Error("Failed to fetch orders from server");
+      }
       const data = await res.json();
-      setOrders(data);
-    } catch (err) {
-      showToast("Failed to fetch orders", "error");
+      setOrders(Array.isArray(data) ? data : []);
+    } catch (err: any) {
+      showToast(err.message || "Failed to fetch orders", "error");
+      setOrders([]);
     } finally {
       setLoading(false);
     }
@@ -136,9 +140,9 @@ export default function AdminOrdersPage() {
             <p className="text-zinc-400 font-bold uppercase text-sm tracking-[0.2em]">No orders received yet</p>
           </div>
         ) : (
-          orders.map((order) => (
+          orders.map((order, idx) => (
             <div 
-              key={order._id.toString()} 
+              key={order._id?.toString() || idx} 
               className="bg-white dark:bg-zinc-900 rounded-[1.5rem] md:rounded-[2rem] border border-zinc-100 dark:border-zinc-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
             >
               <div className="p-5 md:p-8 flex flex-col lg:flex-row gap-6 md:gap-8">
@@ -206,7 +210,7 @@ export default function AdminOrdersPage() {
                 <div className="flex-1 space-y-4">
                    <p className="text-[9px] md:text-[10px] font-black text-zinc-400 uppercase tracking-widest leading-none mb-4">Ordered Items</p>
                    <div className="grid gap-3 max-h-[150px] overflow-y-auto pr-2 custom-scrollbar">
-                     {order.items.map((item: any, idx: number) => (
+                     {(order.items || []).map((item: any, idx: number) => (
                        <div key={idx} className="flex items-center justify-between p-3 rounded-2xl bg-white dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700">
                          <div className="flex items-center gap-3">
                            <div className="h-8 w-8 rounded-lg bg-zinc-100 dark:bg-zinc-700 flex items-center justify-center text-[10px] font-black text-zinc-400">

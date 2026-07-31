@@ -9,6 +9,7 @@ type ProductFormProps = {
     _id?: string;
     name: string;
     category: string;
+    description?: string;
     stockQuantity: number;
     purchaseRate: number;
     sellingPrice: number;
@@ -29,6 +30,7 @@ export function ProductForm({ initialData }: ProductFormProps) {
   const [formData, setFormData] = useState({
     name: initialData?.name || "",
     category: initialData?.category || "T-Shirt",
+    description: initialData?.description || "",
     stockQuantity: initialData?.stockQuantity || 0,
     purchaseRate: initialData?.purchaseRate || 0,
     sellingPrice: initialData?.sellingPrice || 0,
@@ -134,6 +136,21 @@ export function ProductForm({ initialData }: ProductFormProps) {
               onChange={handleChange}
               placeholder="e.g. Urban Oversized Tee"
               className="flex h-20 w-full rounded-[2rem] border-2 border-zinc-200 dark:border-zinc-700 bg-zinc-50/10 dark:bg-zinc-950 px-8 py-2 text-xl font-black text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-300 dark:placeholder:text-zinc-800 focus:outline-none focus:border-emerald-500 transition-all"
+            />
+          </div>
+
+          <div className="space-y-4 group">
+            <label htmlFor="description" className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 pl-2">
+              Product Description
+            </label>
+            <textarea
+              id="description"
+              name="description"
+              value={formData.description}
+              onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+              placeholder="Describe the product's fit, style, material, and unique features..."
+              rows={4}
+              className="flex w-full rounded-[2rem] border-2 border-zinc-200 dark:border-zinc-700 bg-zinc-50/10 dark:bg-zinc-950 px-8 py-6 text-base font-bold text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-300 dark:placeholder:text-zinc-800 focus:outline-none focus:border-emerald-500 transition-all resize-none"
             />
           </div>
 

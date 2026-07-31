@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { name, category, stockQuantity, purchaseRate, sellingPrice, imageUrl, variants } = body;
+    const { name, category, description, stockQuantity, purchaseRate, sellingPrice, imageUrl, variants } = body;
 
     if (!name || !category || purchaseRate === undefined || sellingPrice === undefined) {
       return NextResponse.json(
@@ -44,6 +44,7 @@ export async function POST(request: NextRequest) {
     const product = new Product({
       name,
       category,
+      description: description || "",
       stockQuantity: stockQuantity || 0,
       purchaseRate,
       sellingPrice,

@@ -4,6 +4,7 @@ import { ShoppingBag, X, Check } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "@/context/CartContext";
 import { useToast } from "@/context/ToastContext";
+import { useRouter } from "next/navigation";
 
 interface Variant {
   size: string;
@@ -27,6 +28,7 @@ interface Settings {
 export function ProductCard({ product, settings }: { product: Product; settings: Settings }) {
   const { addToCart, cart, updateQuantity, removeFromCart } = useCart();
   const { showToast } = useToast();
+  const router = useRouter();
   const [showVariants, setShowVariants] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState<Variant | null>(null);
 
@@ -69,21 +71,7 @@ export function ProductCard({ product, settings }: { product: Product; settings:
     }
   };
 
-  const handleIncrement = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (remainingStock > 0) {
-      updateQuantity(product._id, quantityInCart + 1, cartItem?.size);
-    }
-  };
 
-  const handleDecrement = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (quantityInCart > 1) {
-      updateQuantity(product._id, quantityInCart - 1, cartItem?.size);
-    } else {
-      removeFromCart(product._id, cartItem?.size);
-    }
-  };
 
   const totalQuantityInCart = cart.reduce((sum, item) => 
     item._id === product._id ? sum + item.quantity : sum, 0
@@ -91,7 +79,7 @@ export function ProductCard({ product, settings }: { product: Product; settings:
   const displayStock = Math.max(0, product.stockQuantity - totalQuantityInCart);
 
   return (
-    <div className="group cursor-pointer font-outfit relative" onClick={() => hasVariants ? setShowVariants(true) : handleAddToCart()}>
+    <div className="group cursor-pointer font-outfit relative" onClick={() => router.push(`/product/${product._id}`)}>
       <div className="aspect-[3/4] bg-zinc-100 dark:bg-zinc-900 rounded-[2rem] md:rounded-[2.5rem] mb-4 overflow-hidden relative shadow-sm transition-all duration-500 group-hover:shadow-xl group-hover:-translate-y-2">
         {product.imageUrl ? (
           <img
@@ -115,6 +103,14 @@ export function ProductCard({ product, settings }: { product: Product; settings:
 
         <div className="absolute inset-0 bg-black/20 opacity-100 md:opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end justify-center pb-6 md:pb-8 px-4 md:px-8">
           <button
+            onClick={(e) => {
+              e.stopPropagation();
+              if (hasVariants) {
+                setShowVariants(true);
+              } else {
+                handleAddToCart(e);
+              }
+            }}
             className="w-full bg-white/90 backdrop-blur-md md:bg-white text-zinc-900 font-black text-sm md:text-xl tracking-[0.3em] py-5 md:py-6 rounded-2xl hover:bg-[#0a192f] hover:text-white transition-all translate-y-0 md:translate-y-4 group-hover:translate-y-0 duration-300 shadow-xl font-bebas disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center border border-white/20 uppercase"
           >
             {hasVariants ? "SELECT SIZE" : "QUICK ADD"}
